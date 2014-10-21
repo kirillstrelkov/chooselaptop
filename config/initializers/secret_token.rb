@@ -4,4 +4,4 @@
 # If you change this key, all old signed cookies will become invalid!
 # Make sure the secret is at least 30 characters and all random,
 # no regular words or you'll be exposed to dictionary attacks.
-Goodlaptop::Application.config.secret_token = '6622a92f62bcea27c7e7e0d0e05d65653ee84b06a623032501dedb17aaba60cae69b9b04c6c3e92d434b7260208234d91577035d7613862ffa55dc5b05d4ea15'
+Goodlaptop::Application.config.secret_token = 'b9212744dc8684e34ceee6890e732c0a5ffd9247f5bebe3d9808fde9ad6d650ace38368887c5ccccc3895be7c8d07190a38e2bbf17cf62839a95efb31be84d12'
