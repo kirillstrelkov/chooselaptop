@@ -2,7 +2,7 @@
 %p Find me in app/views/laptop/index.html.haml
 
 =form_tag '/laptop/sort', :method => :post do
-  =text_area_tag 'laptops', @query, :autofocus => true ,:placeholder => "Enter many many laptops use 2 enters as a delimiter"
+  =text_area_tag 'laptops', @laptops, :autofocus => true ,:placeholder => "Enter many many laptops use 2 enters as a delimiter"
   %div{:id => 'form-buttons'}
     =button_tag 'Clear', :id=> 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
     =button_tag 'Sort laptops', :id=> 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'

@@ -5,9 +5,8 @@ class LaptopController < ApplicationController
   end
   
   def sort
-    laptops = params[:laptops]
-    @sorted_laptops = get_sorted_laptops_from_text(laptops)
-    puts @sorted_laptops.inspect
+    @laptops = params[:laptops]
+    @sorted_laptops = get_sorted_laptops_from_text(@laptops)
     render :index
   end
 end

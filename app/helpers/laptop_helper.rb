@@ -85,6 +85,7 @@ module LaptopHelper
 
     sorted_laptops = []
     laptops.each do |laptop_desc|
+      laptop_desc.strip!
       cpu = get_cpu(laptop_desc)
       gpu = get_gpu(laptop_desc)
 
@@ -111,6 +112,6 @@ module LaptopHelper
 
   def get_sorted_laptops_from_text(text)
     text.delete!("\r")
-    get_sorted_laptops(text.split(@@splitter))
+    get_sorted_laptops(text.split(@@splitter).compact.uniq)
   end
 end
