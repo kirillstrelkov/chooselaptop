@@ -1,4 +1,8 @@
 Goodlaptop::Application.routes.draw do
+  get "notebookcheck/cpus"
+
+  get "notebookcheck/gpus"
+
   get "laptop/index"
 
 # The priority is based upon order of creation:

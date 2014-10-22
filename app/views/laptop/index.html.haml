@@ -23,14 +23,14 @@
           =@sorted_laptops.index(laptop) + 1
         %td
           =laptop[:avg_index]
-        %td
+        %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
           =laptop[:cpu_index]
-        %td
-          =laptop[:cpu]
-        %td
+        %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
+          =laptop[:cpu_model]
+        %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
           =laptop[:gpu_index]
-        %td
-          =laptop[:gpu]
+        %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
+          =laptop[:gpu_model]
         %td
           =laptop[:price]
       %tr

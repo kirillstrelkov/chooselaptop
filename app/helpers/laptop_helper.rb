@@ -1,104 +1,35 @@
 # encoding: utf-8
 module LaptopHelper
+  include TextParser
   include NotebookcheckHelper
   @@splitter = /\n{2,}/
-  @@bad_index = 9999
-  def get_matched_string_using_regexps(text, regexps)
-    text = text.downcase
-    text = text.delete("®", "™")
-    text = text.gsub("(tm)", '')
-    regexps.each do |regexp, prefix|
-      found = text.scan(regexp)
-      found.flatten!
-      found.compact!
-      return prefix + ' ' + found[-1] unless found.empty?
-    end
-    nil
-  end
-
-  def get_cpu(text)
-    ideal_intel_regexp = /(i\d{1}-? ?(\d{4,}\w?))/
-    common_celeron = /celeron ?(processor)? ?(\w?\d{3,4}\w?)/
-    common_pentium = /pentium ?(processor)? ?(\w?\d{3,4}\w?)/
-    common_intel = /intel ?(atom)? ?(\w?\d{3,4}\w?)/
-    ideal_amd_regexp = /amd ?(\w\d-\d{3,4})/
-    amd_regexp = /amd ?(\w+-core)? ?(\w\d-\d{3,4})/
-    regexps = {
-      ideal_intel_regexp => 'intel',
-      ideal_amd_regexp => 'amd',
-      common_celeron => 'intel',
-      common_pentium => 'intel',
-      common_intel => 'intel',
-      amd_regexp => 'amd',
-    }
-
-    get_matched_string_using_regexps(text, regexps)
-  end
-
-  def get_gpu(text)
-    ideal_intel_regexp = /intel ?([a-z]*)? ?[a-z]* ?graphics ?(\d{4,})?/
-    intel_hd_regexp = /intel hd ?[a-z]* ?(graphics)? ?(\d{4,})?/
-    ideal_amd_regexp = /amd ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
-    ati_regexp = /ati ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
-    ati_regexp_2 = /amd ?[a-z]* ?[a-z0-0]* ?[a-z0-9]* (\w?\d{3,}\w?)/
-    ideal_nvidia_regexp = /nvidia ?[a-z]* ?[a-z]* ? (\w{0,2}\d{3,}\w?)/
-    geforce_regexp = /geforce ?[a-z]* ? (\w{0,2}\d{3,}\w?)/
-    regexps = {
-      ideal_intel_regexp => 'intel',
-      intel_hd_regexp => 'intel',
-      ideal_amd_regexp => 'amd',
-      ati_regexp => 'amd',
-      ati_regexp_2 => 'amd',
-      ideal_nvidia_regexp => 'nvidia',
-      geforce_regexp => 'nvidia',
-    }
-
-    get_matched_string_using_regexps(text, regexps)
-  end
-
-  def get_index_of_cpu_or_gpu(cpu_or_gpu, sorted_names)
-    unless cpu_or_gpu.nil?
-      manufacturer = cpu_or_gpu.split[0]
-      model = cpu_or_gpu.split[-1]
-      sorted_names.each do |name, index|
-        lowered_name = name.downcase
-        if manufacturer == lowered_name.split[0] and lowered_name.split[-1].end_with?(model)
-        return index
-        end
-      end
-    end
-    @@bad_index
-  end
-
-  def get_price(text)
-    found = text.scan(/\d{2,}\.\d+{2}/)
-    if found.empty?
-      return 0.00
-    else
-      return found[-1].to_f
-    end
-  end
 
   def get_sorted_laptops(laptops)
-    cpu_indecies = get_cpu_sorted_names
-    gpu_indecies = get_gpu_sorted_names
-
+    all_cpu_data = get_all_cpu_data_from_notebookcheck
+    all_gpu_data = get_all_gpu_data_from_notebookcheck
+    # TODO remove upper two line
     sorted_laptops = []
     laptops.each do |laptop_desc|
       laptop_desc.strip!
-      cpu = get_cpu(laptop_desc)
-      gpu = get_gpu(laptop_desc)
+      cpu = get_cpu_from_text(laptop_desc)
+      gpu = get_gpu_from_text(laptop_desc)
+      price = get_price_from_text(laptop_desc)
 
-      cpu_index = get_index_of_cpu_or_gpu(cpu, cpu_indecies)
-      gpu_index = get_index_of_cpu_or_gpu(gpu, gpu_indecies)
-      avg_index = ((cpu_index + gpu_index) / 2.0).to_i
-      price = get_price(laptop_desc)
+      # TODO replace with get_cpu_data_from_notebookcheck(cpu)
+      cpu_data = get_cpu_or_gpu_data_from_notebookcheck(cpu, all_cpu_data)
+      # TODO replace with get_gpu_data_from_notebookcheck(gpu)
+      gpu_data = get_cpu_or_gpu_data_from_notebookcheck(gpu, all_gpu_data)
+      if cpu_data[:index] != -1 and gpu_data[:index] != -1
+        avg_index = ((cpu_data[:index] + gpu_data[:index]) / 2.0).to_i
+      else
+        avg_index = -1
+      end
 
       sorted_laptops << {
-        :cpu => cpu,
-        :cpu_index => cpu_index,
-        :gpu => gpu,
-        :gpu_index => gpu_index,
+        :cpu_model => cpu_data[:name],
+        :cpu_index => cpu_data[:index],
+        :gpu_model => gpu_data[:name],
+        :gpu_index => gpu_data[:index],
         :avg_index => avg_index,
         :desc => laptop_desc,
         :price => price
