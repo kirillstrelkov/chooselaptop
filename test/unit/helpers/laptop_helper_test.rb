@@ -142,6 +142,12 @@ end
     end
   end
 
+  def test_get_gpu_no_gpu
+    data = %Q[15.6" HD TruBrite LED (1366x768), Intel Celeron N2830, 4GB DDR3L (1333MHz)/ SATA 500GB 5400rpm, SM DL DVD+/-RW, WLAN 802.11b/g/n, Bluetooth 4.0/ ML, /...]
+    assert_equal("intel n2830", get_cpu(data))
+    assert_equal(nil, get_gpu(data))
+  end
+
   def test_get_gpu
     data = {
       %Q[17.3" (1600x900) led glare hd+, intel core i5-4210m 2.6ghz, 4gb ddr3-1600, intel hd 4600, 1tb 5400rpm, sm dvd+-rw, dos, Беспроводной  b/g/n, Камера, 1xusb...] => "intel 4600",

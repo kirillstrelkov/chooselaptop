@@ -2,6 +2,7 @@
 module LaptopHelper
   include NotebookcheckHelper
   @@splitter = /\n{2,}/
+  @@bad_index = 9999
   def get_matched_string_using_regexps(text, regexps)
     text = text.downcase
     text = text.delete("®", "™")
@@ -56,15 +57,26 @@ module LaptopHelper
   end
 
   def get_index_of_cpu_or_gpu(cpu_or_gpu, sorted_names)
-    manufacturer = cpu_or_gpu.split[0]
-    model = cpu_or_gpu.split[-1]
-    sorted_names.each do |name, index|
-      lowered_name = name.downcase
-      if manufacturer == lowered_name.split[0] and lowered_name.split[-1].end_with?(model)
-      return index
+    unless cpu_or_gpu.nil?
+      manufacturer = cpu_or_gpu.split[0]
+      model = cpu_or_gpu.split[-1]
+      sorted_names.each do |name, index|
+        lowered_name = name.downcase
+        if manufacturer == lowered_name.split[0] and lowered_name.split[-1].end_with?(model)
+        return index
+        end
       end
     end
-    9999
+    @@bad_index
+  end
+
+  def get_price(text)
+    found = text.scan(/\d{2,}\.\d+{2}/)
+    if found.empty?
+      return 0.00
+    else
+      return found[-1].to_f
+    end
   end
 
   def get_sorted_laptops(laptops)
@@ -79,6 +91,7 @@ module LaptopHelper
       cpu_index = get_index_of_cpu_or_gpu(cpu, cpu_indecies)
       gpu_index = get_index_of_cpu_or_gpu(gpu, gpu_indecies)
       avg_index = ((cpu_index + gpu_index) / 2.0).to_i
+      price = get_price(laptop_desc)
 
       sorted_laptops << {
         :cpu => cpu,
@@ -86,12 +99,13 @@ module LaptopHelper
         :gpu => gpu,
         :gpu_index => gpu_index,
         :avg_index => avg_index,
-        :desc => laptop_desc
+        :desc => laptop_desc,
+        :price => price
       }
     end
 
     sorted_laptops.sort_by do |hash|
-      [hash[:avg_index], hash[:cpu_index], hash[:gpu_index]]
+      [hash[:avg_index], hash[:cpu_index], hash[:gpu_index], hash[:price]]
     end
   end
 

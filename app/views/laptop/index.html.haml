@@ -6,27 +6,33 @@
   %div{:id => 'form-buttons'}
     =button_tag 'Clear', :id=> 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
     =button_tag 'Sort laptops', :id=> 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'
--if !@sorted_laptops.empty?
+-unless @sorted_laptops.empty?
   %p Sorted list of phone best-to-worst:
-%table
-  %tr
-    %th Average index
-    %th CPU index
-    %th CPU model
-    %th GPU index
-    %th GPU model
-  -@sorted_laptops.each  do |laptop|
+  %table
     %tr
-      %td
-        =laptop[:avg_index]
-      %td
-        =laptop[:cpu_index]
-      %td
-        =laptop[:cpu]
-      %td
-        =laptop[:gpu_index]
-      %td
-        =laptop[:gpu]
-    %tr
-      %td{:colspan => 5}
-        =laptop[:desc]
+      %th Place
+      %th Average index
+      %th CPU index
+      %th CPU model
+      %th GPU index
+      %th GPU model
+      %th Price
+    -@sorted_laptops.each  do |laptop|
+      %tr
+        %td
+          =@sorted_laptops.index(laptop) + 1
+        %td
+          =laptop[:avg_index]
+        %td
+          =laptop[:cpu_index]
+        %td
+          =laptop[:cpu]
+        %td
+          =laptop[:gpu_index]
+        %td
+          =laptop[:gpu]
+        %td
+          =laptop[:price]
+      %tr
+        %td{:colspan => 5}
+          =laptop[:desc]
