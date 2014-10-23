@@ -69,7 +69,7 @@ module TextParser
   end
 
   def get_price_from_text(text)
-    found = text.scan(/\d{2,}\.\d+{2}/)
+    found = text.scan(/\d{2,}[\.,]\d+{2}/)
     if found.empty?
       return 0.00
     else
