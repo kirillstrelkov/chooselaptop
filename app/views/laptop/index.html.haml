@@ -11,6 +11,7 @@
     =button_tag 'Clear', :id=> 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
     =button_tag 'Sort laptops', :id=> 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'
 -unless @sorted_laptops.empty?
+  %p Found #{@good_laptops_count + @bad_laptops_count} laptops with good data - #{@good_laptops_count} and with bad data - #{@bad_laptops_count}
   %p Sorted list of phone best-to-worst:
   %table
     %tr

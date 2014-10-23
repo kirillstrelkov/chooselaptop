@@ -3,7 +3,8 @@ module TextParser
   @@bad_data = {:name => 'unknown', :index => -1}
   def get_matched_string_using_regexps(text, regexps)
     text = text.downcase
-    text = text.delete("®", "™")
+    text = text.gsub("®", '')
+    text = text.gsub("™", '')
     text = text.gsub("(tm)", '')
     regexps.each do |regexp, prefix|
       found = text.scan(regexp)
@@ -34,13 +35,14 @@ module TextParser
   end
 
   def get_gpu_from_text(text)
-    ideal_intel_regexp = /intel ?([a-z]*)? ?[a-z]* ?graphics ?(\d{4,})?/
-    intel_hd_regexp = /intel hd ?[a-z]* ?(graphics)? ?(\d{4,})?/
+    ideal_intel_regexp = /intel ?([a-z]*)? ?[a-z]* ?graphics ?(\d{4,})/
+    intel_hd_regexp = /intel hd ?[a-z]* ?(graphics)? ?(\d{4,})/
+    intel_hd_regexp2 = /hd graphics ?(\d{4,})/
     ideal_amd_regexp = /amd ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
     ati_regexp = /ati ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
     ati_regexp_2 = /amd ?[a-z]* ?[a-z0-0]* ?[a-z0-9]* (\w?\d{3,}\w?)/
-    ideal_nvidia_regexp = /nvidia ?[a-z]* ?[a-z]* ? (\w{0,2}\d{3,}\w?)/
-    geforce_regexp = /geforce ?[a-z]* ? (\w{0,2}\d{3,}\w?)/
+    ideal_nvidia_regexp = /nvidia ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/
+    geforce_regexp = /geforce ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/
     regexps = {
       ideal_intel_regexp => 'intel',
       intel_hd_regexp => 'intel',
@@ -49,6 +51,7 @@ module TextParser
       ati_regexp_2 => 'amd',
       ideal_nvidia_regexp => 'nvidia',
       geforce_regexp => 'nvidia',
+      intel_hd_regexp2 => 'intel'
     }
 
     get_matched_string_using_regexps(text, regexps)

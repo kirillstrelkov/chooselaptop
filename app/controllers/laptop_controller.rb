@@ -9,7 +9,6 @@ class LaptopController < ApplicationController
     end
 
     @use_delimiter = params[:use_delimiter] == 'true' ? true : false
-    
     @sorted_laptops = []
   end
   
@@ -28,6 +27,14 @@ class LaptopController < ApplicationController
     else
       @sorted_laptops = get_sorted_laptops_from_text(@laptops)
     end
+    if @sorted_laptops
+      @good_laptops_count = get_good_laptops_count(@sorted_laptops)
+      @bad_laptops_count = get_bad_laptops_count(@sorted_laptops)
+    else
+      @good_laptops_count = -1
+      @bad_laptops_count = -1
+    end
+    puts 
     render :index
   end
 end

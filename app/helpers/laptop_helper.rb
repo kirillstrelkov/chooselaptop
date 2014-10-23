@@ -50,4 +50,12 @@ module LaptopHelper
     text.delete!("\r")
     get_sorted_laptops(text.split(delimiter).compact.uniq)
   end
+  
+  def get_good_laptops_count(sorted_laptops)
+    sorted_laptops.reject{|laptop| laptop[:cpu_index] == -1 or laptop[:gpu_index] == -1}.length
+  end
+  
+  def get_bad_laptops_count(sorted_laptops)
+    sorted_laptops.select{|laptop| laptop[:cpu_index] == -1 or laptop[:gpu_index] == -1}.length
+  end
 end
