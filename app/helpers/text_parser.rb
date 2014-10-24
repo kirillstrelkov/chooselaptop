@@ -16,19 +16,25 @@ module TextParser
   end
 
   def get_cpu_from_text(text)
-    ideal_intel_regexp = /(i\d{1}-? ?(\d{4,}\w?))/
-    common_celeron = /celeron ?(processor)? ?(\w?\d{3,4}\w?)/
-    common_pentium = /pentium ?(processor)? ?(\w?\d{3,4}\w?)/
-    common_intel = /intel ?(atom)? ?(\w?\d{3,4}\w?)/
+    ideal_intel_regexp = /(i\d{1}-? ?(\d{4,}\w{1,2}))/
+    common_celeron = /celeron ?(processor)? ?(\w?\d{3,4}\w{0,2})/
+    common_pentium = /pentium ?(processor)? ?(\w?\d{3,4}\w{0,2})/
+    common_intel = /intel ?(atom)? ?(\w?\d{3,4}\w{1,2})/
+    intel_special = /intel core (\w-\w{4,5})/
     ideal_amd_regexp = /amd ?(\w\d-\d{3,4})/
+    ideal_amd_regexp2 = /amd ?\w+ ?(\w{2,3}-\d{3,4}\w?)/
     amd_regexp = /amd ?(\w+-core)? ?(\w\d-\d{3,4})/
+    amd_special = /amd ?(fx-\d{4}\w?)/
     regexps = {
       ideal_intel_regexp => 'intel',
       ideal_amd_regexp => 'amd',
+      ideal_amd_regexp2 => 'amd',
       common_celeron => 'intel',
       common_pentium => 'intel',
       common_intel => 'intel',
       amd_regexp => 'amd',
+      intel_special => 'intel',
+      amd_special => 'amd'
     }
 
     get_matched_string_using_regexps(text, regexps)
@@ -39,7 +45,7 @@ module TextParser
     intel_hd_regexp = /intel hd ?[a-z]* ?(graphics)? ?(\d{4,})/
     intel_hd_regexp2 = /hd graphics ?(\d{4,})/
     ideal_amd_regexp = /amd ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
-    ati_regexp = /ati ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
+    ati_regexp = /ati ?[a-z]* ?[a-z]* ?[a-z0-9]* (\w?\d{3,}\w?)/
     ati_regexp_2 = /amd ?[a-z]* ?[a-z0-0]* ?[a-z0-9]* (\w?\d{3,}\w?)/
     ideal_nvidia_regexp = /nvidia ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/
     geforce_regexp = /geforce ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/

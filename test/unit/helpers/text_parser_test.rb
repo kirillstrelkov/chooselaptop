@@ -135,14 +135,14 @@ end
       %Q[15.6" led (1366x768)wxgag/ intel celeron n2820 Двухъядерный/ intel hd graphics/ vram shared/ 2gb ddr3/ 320gb Жесткий диск/ bgn/ bt/ usb3.0/ sd reader/ 4 cell batt...] => "intel n2820",
       %Q[15.6" led 1366x768 wxgag non-glare, intel celeron n2815 1.86ghz, intel hd graphics, 2gb ddr3, 320gb Жесткий диск, bgn, 4-cell battery, webcamera, usb 2.0/usb 3...] => "intel n2815",
       %Q[15.6" (1366x768) hd glossy, amd e1-6010 1.35 ghz, 4gb ddr3, 500gb 5400rpm, integrated amd radeon r2 series, wlan 802.11b/g/n +bluetooth 4.0, dvd±rw, 1...] => "amd e1-6010",
-      %Q[15.6" led 1366x768 wxgag, intel core 3-3217u 1.8ghz, intel hd graphics, 4gb ddr3, 500gb Жесткий диск, bgn, bt, 4 cell batt. hd камера, usb 3.0, Черный, microsof...] => nil,
+      %Q[15.6" led 1366x768 wxgag, intel core 3-3217u 1.8ghz, intel hd graphics, 4gb ddr3, 500gb Жесткий диск, bgn, bt, 4 cell batt. hd камера, usb 3.0, Черный, microsof...] => 'intel 3-3217u',
     }
-    found_percentage = data.values.reject{|v| v.nil?}.length / data.values.length.to_f * 100
-    assert_equal(98, found_percentage.to_i)
     data.each do |laptop_desc, cpu|
       assert_equal(cpu, get_cpu_from_text(laptop_desc), laptop_desc)
     end
     
+    found_percentage = data.values.reject{|v| v.nil?}.length / data.values.length.to_f * 100
+    assert_equal(100, found_percentage.to_i)
   end
 
   def test_get_gpu_no_gpu_from_text
@@ -256,12 +256,12 @@ end
       %Q[15.6" (1366x768) hd glossy, amd e1-6010 1.35 ghz, 4gb ddr3, 500gb 5400rpm, integrated amd radeon r2 series, wlan 802.11b/g/n +bluetooth 4.0, dvd±rw, 1...] => nil,
       %Q[15.6" led 1366x768 wxgag, intel core 3-3217u 1.8ghz, intel hd graphics, 4gb ddr3, 500gb Жесткий диск, bgn, bt, 4 cell batt. hd камера, usb 3.0, Черный, microsof...] => nil,
     }
-    found_percentage = data.values.reject{|v| v.nil?}.length / data.values.length.to_f * 100
-    assert_equal(61, found_percentage.to_i)
     data.each do |laptop_desc, gpu|
       assert_equal(gpu, get_gpu_from_text(laptop_desc), laptop_desc)
     end
     
+    found_percentage = data.values.reject{|v| v.nil?}.length / data.values.length.to_f * 100
+    assert_equal(61, found_percentage.to_i)
   end
   
   def test_get_gpu_from_text_1
