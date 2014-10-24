@@ -2,7 +2,9 @@ require 'open-uri'
 require 'nokogiri'
 
 module NotebookcheckHelper
-  @@bad_data = {:name => 'unknown', :index => -1}
+  @@bad_data = {:name => 'unknown', :index => -1, :href => nil}
+  @@cpu_url = "http://www.notebookcheck.net/Mobile-Processors-Benchmarklist.2436.0.html"
+  @@gpu_url = "http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1"
   def get_data_from_url(url)
     doc = Nokogiri::HTML(open(url))
     xpath_row  = "//div[@id='content']//table//tr[@class='odd' or @class='even']"
@@ -25,13 +27,11 @@ module NotebookcheckHelper
   end
 
   def get_all_cpu_data_from_notebookcheck
-    url = "http://www.notebookcheck.net/Mobile-Processors-Benchmarklist.2436.0.html"
-    get_data_from_url(url)
+    get_data_from_url(@@cpu_url)
   end
 
   def get_all_gpu_data_from_notebookcheck
-    url = "http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1"
-    get_data_from_url(url)
+    get_data_from_url(@@gpu_url)
   end
   
   def get_cpu_data_from_notebookcheck(cpu)

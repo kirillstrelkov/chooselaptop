@@ -10,6 +10,8 @@ class LaptopsController < ApplicationController
       @delimiter = delimiter.strip
     end
     @use_delimiter = params[:use_delimiter] == 'yes' ? true : false
+    @cpu_href = @@cpu_url
+    @gpu_href = @@gpu_url
 
     unless @laptops.nil?
       if @use_delimiter

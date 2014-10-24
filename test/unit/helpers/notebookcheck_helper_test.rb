@@ -31,8 +31,13 @@ class NotebookcheckHelperTest < ActionView::TestCase
   end
 
   def test_get_bad_gpu_and_bad_cpu_from_notebookcheck
-    assert_equal("unknown", get_cpu_data_from_notebookcheck("sdfsdf")[:name])
-    assert_equal("unknown", get_gpu_data_from_notebookcheck("sdfsdfdsf")[:name])
+    data = get_cpu_data_from_notebookcheck("sdfsdf")
+    assert_equal("unknown", data[:name])
+    assert_equal(@@bad_data, data)
+    
+    data = get_gpu_data_from_notebookcheck("sdfsdfdsf")
+    assert_equal("unknown", data[:name])
+    assert_equal(@@bad_data, data)
   end
 
   def test_parse_all_cpus_from_notebookcheck
