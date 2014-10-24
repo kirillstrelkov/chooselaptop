@@ -13,9 +13,11 @@ module NotebookcheckHelper
     doc.xpath(xpath_row).each do |row|
       index = row.xpath(xpath_index).text().match(/\d+/).to_s.to_i
       name = row.xpath(xpath_name).text()
+      href = row.xpath(xpath_name).xpath("./a/@href").text()
       data << {
         :name => name,
-        :index => index
+        :index => index,
+        :href => href
       }
     end
 
@@ -28,7 +30,7 @@ module NotebookcheckHelper
   end
 
   def get_all_gpu_data_from_notebookcheck
-    url = "http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html"
+    url = "http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1"
     get_data_from_url(url)
   end
   
@@ -42,14 +44,11 @@ module NotebookcheckHelper
   
   def get_cpu_or_gpu_data_from_notebookcheck(cpu_or_gpu, data_from_notebookcheck)
     unless cpu_or_gpu.nil?
-      manufacturer = cpu_or_gpu.split[0]
-      model = cpu_or_gpu.split[-1]
+      regexp = /[a-z]+|[0-9]+/
       data_from_notebookcheck.each do |data|
         name = data[:name]
-        index = data[:index]
-        lowered_name = name.downcase
-        if manufacturer == lowered_name.split[0] and lowered_name.split[-1].end_with?(model)
-          return {:name => name, :index => index}
+        if (cpu_or_gpu.downcase.scan(regexp) - name.downcase.scan(regexp)).empty?
+          return {:name => name, :index => data[:index], :href => data[:href]}
         end
       end
     end

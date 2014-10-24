@@ -28,8 +28,10 @@ module LaptopHelper
   
         sorted_laptops << {
           :cpu_model => cpu_data[:name],
+          :cpu_model_href => cpu_data[:href],
           :cpu_index => cpu_data[:index],
           :gpu_model => gpu_data[:name],
+          :gpu_model_href => gpu_data[:href],
           :gpu_index => gpu_data[:index],
           :avg_index => avg_index,
           :desc => laptop_desc,

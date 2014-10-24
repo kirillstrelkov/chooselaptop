@@ -6,6 +6,7 @@ class NotebookcheckHelperTest < ActionView::TestCase
     data = get_all_cpu_data_from_notebookcheck
     assert_not_equal('unknown', data[0][:name])
     assert_not_equal(-1, data[0][:index])
+    assert_not_nil(data[0][:href])
   end
 
   def test_get_gpu_sorted_names
@@ -13,6 +14,7 @@ class NotebookcheckHelperTest < ActionView::TestCase
     assert_not_empty data
     assert_not_equal('unknown', data[0][:name])
     assert_not_equal(-1, data[0][:index])
+    assert_not_nil(data[0][:href])
   end
   
   def test_get_cpu_from_notebookcheck

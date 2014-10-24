@@ -31,11 +31,17 @@
         %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
           =laptop[:cpu_index]
         %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
-          =laptop[:cpu_model]
+          -if laptop[:cpu_index] != -1
+            =link_to laptop[:cpu_model], laptop[:cpu_model_href], :target => '_blank'
+          -else
+            =laptop[:cpu_model]
         %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
           =laptop[:gpu_index]
         %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
-          =laptop[:gpu_model]
+          -if laptop[:gpu_index] != -1
+            =link_to laptop[:gpu_model], laptop[:gpu_model_href], :target => '_blank'
+          -else
+            =laptop[:gpu_model]
         %td
           =laptop[:price]
       %tr
