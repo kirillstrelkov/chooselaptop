@@ -1,8 +1,8 @@
 # encoding: utf-8
 require 'test_helper'
 
-class LaptopHelperTest < ActionView::TestCase
-  include LaptopHelper
+class LaptopsHelperTest < ActionView::TestCase
+  include LaptopsHelper
   def test_get_sorted_laptops
     laptops = [%Q[17.3" (1600x900) led glare hd+, intel core i5-4210m 2.6ghz, 4gb ddr3-1600, intel hd 4600, 1tb 5400rpm, sm dvd+-rw, dos, Беспроводной  b/g/n, Камера, 1xusb...],
       %Q[15.6" hd (1366x768), intel core i5-4200m 2.50ghz, 6gb (2gb+4gbddriii1600), 1tb 5400rpm, amd radeon hd 8750m 2gb, sm dvd+-rw, dos, Беспроводной  802.11 b/g/...]]

@@ -1,18 +1,17 @@
 Goodlaptop::Application.routes.draw do
   get "notebookcheck/cpus"
-
   get "notebookcheck/gpus"
 
-  get "laptop/index"
+  get "laptops/index"
 
 # The priority is based upon order of creation:
 # first created -> highest priority.
 
-  get 'laptop' => 'laptop#index'
+  get 'laptops' => 'laptops#index'
   #post 'notebookcheck'
-  post 'laptop/sort'
+  post 'laptops/index'
 
-  root :to => 'laptop#index'
+  root :to => 'laptops#index'
 # Sample of regular route:
 #   match 'products/:id' => 'catalog#view'
 # Keep in mind you can assign values other than :controller and :action

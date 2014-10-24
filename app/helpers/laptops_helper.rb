@@ -1,5 +1,4 @@
-# encoding: utf-8
-module LaptopHelper
+module LaptopsHelper
   include TextParser
   include NotebookcheckHelper
   @@delimiter = /\n{2,}/
