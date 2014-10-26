@@ -1,6 +1,8 @@
 Goodlaptop::Application.routes.draw do
   get "notebookcheck/cpus"
+  get "notebookcheck/cpus/:name", :controller => 'notebookcheck', :action => 'get_cpu'
   get "notebookcheck/gpus"
+  get "notebookcheck/gpus/:name", :controller => 'notebookcheck', :action => 'get_gpu'
 
   get "laptops/index"
 
@@ -8,7 +10,6 @@ Goodlaptop::Application.routes.draw do
 # first created -> highest priority.
 
   get 'laptops' => 'laptops#index'
-  #post 'notebookcheck'
   post 'laptops/index'
 
   root :to => 'laptops#index'

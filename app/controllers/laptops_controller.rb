@@ -1,5 +1,6 @@
 class LaptopsController < ApplicationController
   include LaptopsHelper
+  include NotebookcheckHelper
   def index
     # TODO add url to CPU and GPU to correct indecies
     @laptops = params[:laptops]

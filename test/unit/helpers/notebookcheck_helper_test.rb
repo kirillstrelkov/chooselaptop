@@ -18,19 +18,19 @@ class NotebookcheckHelperTest < ActionView::TestCase
     assert_not_nil(data[0][:href])
   end
 
-  def test_get_cpu_from_notebookcheck
+  def test_get_cpu
     assert_equal("Intel Core i5-4210M", get_cpu_data_from_notebookcheck("intel 4210m")[:name])
   end
 
-  def test_get_cpu_from_notebookcheck2
+  def test_get_cpu2
     assert_equal("Intel Core i3-3217U", get_cpu_data_from_notebookcheck("intel 3-3217u")[:name])
   end
 
-  def test_get_gpu_from_notebookcheck
+  def test_get_gpu
     assert_equal("NVIDIA GeForce GT 720M", get_gpu_data_from_notebookcheck("nvidia 720m")[:name])
   end
 
-  def test_get_bad_gpu_and_bad_cpu_from_notebookcheck
+  def test_get_bad_gpu_and_bad_cpu
     data = get_cpu_data_from_notebookcheck("sdfsdf")
     assert_equal("unknown", data[:name])
     assert_equal(@@bad_data, data)
@@ -40,7 +40,7 @@ class NotebookcheckHelperTest < ActionView::TestCase
     assert_equal(@@bad_data, data)
   end
 
-  def test_parse_all_cpus_from_notebookcheck
+  def test_parse_all_cpus
     all_data = get_all_cpu_data_from_notebookcheck
     bad_data = []
     all_data.each do |data|
@@ -52,7 +52,7 @@ class NotebookcheckHelperTest < ActionView::TestCase
     assert good_precentage.to_i >= 74, "Wasn't parsed, good pretentage #{good_precentage}:\n%s\n" % bad_data.join("\n")
   end
 
-  def test_parse_all_gpus_from_notebookcheck
+  def test_parse_all_gpus
     all_data = get_all_gpu_data_from_notebookcheck
     bad_data = []
     all_data.each do |data|
