@@ -1,3 +1,4 @@
+require 'open-uri'
 class NotebookcheckController < ApplicationController
   include NotebookcheckHelper
   def cpus

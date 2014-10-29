@@ -1,55 +1,97 @@
 %noscript{:class => 'msg note'}
   Please enable Javascript otherwise you will not be able to use all features
 
-=form_tag 'index', :method => :post do
-  =text_area_tag 'laptops', @laptops, :autofocus => true ,:placeholder => "Enter many many laptops use 2 enters as a delimiter"
-  %div{:id => 'form-buttons'}
-    =check_box_tag 'use_delimiter', 'yes', @use_delimiter
-    =label_tag 'use_delimiter', 'Use my own delimiter'
-    =text_field_tag 'delimiter', @delimiter, :placeholder => 'Enter your own delimiter'
-    %br
-    =button_tag 'Clear', :id=> 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
-    =button_tag 'Sort laptops', :id=> 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'
--unless @sorted_laptops.empty?
-  %p Found #{@good_laptops_count + @bad_laptops_count} laptops: #{@good_laptops_count} with good data and #{@bad_laptops_count} with bad data
-  %p Sorted list of phone best-to-worst:
-  %table
-    %tr
-      %th Place
-      %th Average index
-      %th CPU index
-      %th CPU model
-      %th GPU index
-      %th GPU model
-      %th Price
-    -@sorted_laptops.each  do |laptop|
-      %tr
-        %td
-          =@sorted_laptops.index(laptop) + 1
-        %td
-          =laptop[:avg_index]
-        %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
-          -if laptop[:cpu_index] != -1
-            =link_to laptop[:cpu_index], @cpu_href, :target => '_blank'
-          -else
-            =laptop[:cpu_index]
-        %td{:class => ('bad_data' if laptop[:cpu_index] == -1)}
-          -if laptop[:cpu_index] != -1
-            =link_to laptop[:cpu_model], laptop[:cpu_model_href], :target => '_blank'
-          -else
-            =laptop[:cpu_model]
-        %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
-          -if laptop[:gpu_index] != -1
-            =link_to laptop[:gpu_index], @gpu_href, :target => '_blank'
-          -else
-            =laptop[:gpu_index]
-        %td{:class => ('bad_data' if laptop[:gpu_index] == -1)}
-          -if laptop[:gpu_index] != -1
-            =link_to laptop[:gpu_model], laptop[:gpu_model_href], :target => '_blank'
-          -else
-            =laptop[:gpu_model]
-        %td
-          =laptop[:price]
-      %tr
-        %td{:colspan => 5}
-          =laptop[:desc]
+%div{:class => 'container'}
+  %div{:class => 'row'}
+    %div{:class => 'col-md-12'}
+      =form_tag '/laptops/index', :method => :post do
+        %div{:class => 'form-group col-md-12'}
+          =text_area_tag 'laptops', @laptops, :class => 'form-control', :rows => '7', :autofocus => true ,:placeholder => "Enter many many laptops use 2 enters as a delimiter"
+        %div{:id => 'form-buttons'}
+          %div{:class => 'form-group'}
+            %div{:class => 'checkbox col-md-12'}
+              %div{:class => 'col-md-3'}
+                %label
+                  %input{:type => 'checkbox', :id =>'use_delimiter', :name => 'use_delimiter', :value => @use_delimiter}
+                    Use my own delimiter
+              %div{:class => 'col-md-9'}
+                =text_field_tag 'delimiter', @delimiter, :placeholder => 'Enter your own delimiter', :class => 'form-control', :disabled => 'disabled'
+            %div{:class => 'col-md-12'}
+              =button_tag 'Clear', :class => 'btn btn-default', :id => 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
+              =button_tag 'Split and sort laptops', :class => 'btn btn-primary', :id => 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'
+  %div{:class => 'row'}
+    %div{:class => 'col-md-12'}
+      -unless @sorted_laptops.empty?
+        %div{:class => 'alert alert-warning alert-dismissible'}
+          Found 
+          %mark
+            #{@good_laptops_count + @bad_laptops_count} 
+          laptops: 
+          %mark
+            #{@good_laptops_count} 
+          laptops with good data and
+          %mark
+            #{@bad_laptops_count} 
+          \- with bad data.
+          %strong
+            Please fix or remove laptops with bad data.
+          %button{:type => 'button', :class => 'close', 'data-dismiss' => 'alert'}
+            %span{'aria-hidden' => 'true'}
+              &times;
+            %span{:class => 'sr-only'}
+              Close
+        %table{:class => 'table table-condensed'}
+          %thead
+            %tr
+              %th #
+              %th Name
+              %th Average index
+              %th CPU index
+              %th CPU model
+              %th GPU index
+              %th GPU model
+              %th Price
+              %th Actions
+          %tbody
+            -@sorted_laptops.each  do |laptop|
+              -index = @sorted_laptops.index(laptop) + 1
+              %tr
+                %td
+                  =index
+                %td{:class => 'laptop_name'}
+                  =laptop[:desc].slice(0, 35) + '...'
+                  %span{:class => 'pull-right glyphicon glyphicon-collapse-down'}
+                %td
+                  =laptop[:avg_index]
+                %td{:class => 'cpu_index'}
+                  -if laptop[:cpu_index] != -1
+                    =link_to laptop[:cpu_index], @cpu_href, :target => '_blank'
+                  -else
+                    =laptop[:cpu_index]
+                %td{:class => 'cpu_model ' + (laptop[:cpu_index] == -1 ? 'bg-danger' : '')}
+                  -if laptop[:cpu_index] != -1
+                    =link_to laptop[:cpu_model], laptop[:cpu_model_href], :target => '_blank'
+                  -else
+                    =laptop[:cpu_model]
+                %td{:class => 'gpu_index'}
+                  -if laptop[:gpu_index] != -1
+                    =link_to laptop[:gpu_index], @gpu_href, :target => '_blank'
+                  -else
+                    =laptop[:gpu_index]
+                %td{:class => 'gpu_model ' + (laptop[:gpu_index] == -1 ? 'bg-danger' : '')}
+                  -if laptop[:gpu_index] != -1
+                    =link_to laptop[:gpu_model], laptop[:gpu_model_href], :target => '_blank'
+                  -else
+                    =laptop[:gpu_model]
+                %td
+                  =laptop[:price]
+                %td
+                  %button{:class => 'btn btn-xs edit ' + (laptop[:gpu_index] == -1 || laptop[:cpu_index] == -1 ? 'btn-warning' : 'btn-default')}
+                    Edit
+                  %button{:class => 'btn btn-success btn-xs apply hidden'}
+                    Apply
+                  %button{:class => 'btn btn-danger btn-xs remove'}
+                    Remove
+              %tr
+                %td{:colspan => 9,:class => 'laptop_desc hidden'}
+                  =laptop[:desc]
