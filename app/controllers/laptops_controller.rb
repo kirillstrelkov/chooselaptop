@@ -3,6 +3,7 @@ class LaptopsController < ApplicationController
   include NotebookcheckHelper
   def index
     # TODO add url to CPU and GPU to correct indecies
+    puts params
     @laptops = params[:laptops]
     delimiter = params[:delimiter]
     if delimiter.nil? or delimiter.length == 0
