@@ -61,6 +61,6 @@ class NotebookcheckHelperTest < ActionView::TestCase
       end
     end
     good_precentage = (all_data.length - bad_data.length) / all_data.length.to_f * 100
-    assert good_precentage.to_i >= 79, "Wasn't parsed, good pretentage #{good_precentage}:\n%s\n" % bad_data.join("\n")
+    assert good_precentage.to_i >= 78, "Wasn't parsed, good pretentage #{good_precentage}:\n%s\n" % bad_data.join("\n")
   end
 end

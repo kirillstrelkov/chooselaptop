@@ -14,7 +14,7 @@
                 %input{:type => 'checkbox', :id =>'use_delimiter', :name => 'use_delimiter', :checked => @use_delimiter, :value => 'yes'}
                   Use my own delimiter
             %div{:class => 'col-md-9'}
-              =text_field_tag 'delimiter', @delimiter, :placeholder => 'Enter your own delimiter', :class => 'form-control', :disabled => 'disabled'
+              =text_field_tag 'delimiter', @delimiter, :placeholder => 'Enter your own delimiter', :class => 'form-control', :disabled => !@use_delimiter
           %div{:class => 'col-md-12'}
             =button_tag 'Clear', :class => 'btn btn-default', :id => 'clear_btn', :type => 'submit', :name => 'commit', :value => 'clear'
             =button_tag 'Split and sort laptops', :class => 'btn btn-primary', :id => 'search_btn', :type => 'submit', :name => 'commit', :value => 'sort'
@@ -54,13 +54,13 @@
           %tbody
             -@sorted_laptops.each  do |laptop|
               -index = @sorted_laptops.index(laptop) + 1
-              %tr
+              %tr{:class => 'row_data'}
                 %td
                   =index
                 %td{:class => 'laptop_name'}
-                  =laptop[:desc].slice(0, 35) + '...'
-                  %span{:class => 'pull-right glyphicon glyphicon-collapse-down'}
-                %td
+                  %a{:href => '#'}
+                    =laptop[:desc].slice(0, 35) + '...'
+                %td{:class => 'avg_index'}
                   =laptop[:avg_index]
                 %td{:class => 'cpu_index'}
                   -if laptop[:cpu_index] != -1
@@ -82,8 +82,8 @@
                     =link_to laptop[:gpu_model], laptop[:gpu_model_href], :target => '_blank'
                   -else
                     =laptop[:gpu_model]
-                %td
-                  =laptop[:price]
+                %td{:class => 'price'}
+                  #{'%.2f' % laptop[:price]}
                 %td
                   %button{:class => 'btn btn-xs edit ' + (laptop[:gpu_index] == -1 || laptop[:cpu_index] == -1 ? 'btn-warning' : 'btn-default')}
                     Edit
@@ -91,6 +91,7 @@
                     Apply
                   %button{:class => 'btn btn-danger btn-xs remove'}
                     Remove
-              %tr
+              %tr{:class => 'row_desc'}
                 %td{:colspan => 9,:class => 'laptop_desc hidden'}
                   =laptop[:desc]
+

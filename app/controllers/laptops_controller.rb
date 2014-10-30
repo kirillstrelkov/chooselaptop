@@ -6,12 +6,12 @@ class LaptopsController < ApplicationController
     puts params
     @laptops = params[:laptops]
     delimiter = params[:delimiter]
-    if delimiter.nil? or delimiter.length == 0
+    if delimiter.nil? or delimiter.strip.length == 0
       @delimiter = nil
     else
       @delimiter = delimiter.strip
     end
-    @use_delimiter = params[:use_delimiter] == 'yes' ? true : false
+    @use_delimiter = params[:use_delimiter] == 'yes' && !@delimiter.nil? ? true : false
     @cpu_href = @@cpu_url
     @gpu_href = @@gpu_url
 

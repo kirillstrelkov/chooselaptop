@@ -12,22 +12,75 @@ $(document).ready ->
   window.cbl.GPUS_URL = 'http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1'
   window.cbl.UNKNOWN = 'unknown'
   window.cbl.CLASSES = {BG_DANGER: 'bg-danger'}
+  
+  window.cbl.tokenize = (objOrName)->
+    if typeof objOrName == 'object'
+      objOrName = objOrName['name']
+
+    if typeof objOrName == 'string'
+      val = objOrName.trim().match(/[a-z]+|[0-9]+/gi)
+    else
+      val = []
+    return val
+
+  window.cbl.getData = ()->
+    #TODO implement
+    data = []
+    $rowsData = $('table tr.row_data')
+    $rowsDesc = $('table tr.row_desc')
+    $($rowsData).each (index, $rowData)->
+      $rowData = $($rowData)
+      $rowDesc = $($rowDesc)
+      name = $rowData.find('td.laptop_name a').text().trim()
+      avgIndex = $rowData.find('td.avg_index').text().trim()
+      cpuIndex = $rowData.find('td.cpu_index').text().trim()
+      cpuModel = $rowData.find('td.cpu_model').text().trim()
+      gpuIndex = $rowData.find('td.gpu_index').text().trim()
+      gpuModel = $rowData.find('td.gpu_model').text().trim()
+      price = $rowData.find('td.price').text().trim()
+      desc = $rowDesc.find('td.laptop_desc').text().trim()
+      laptop = {
+        'name': name, 
+        'avg_index': avgIndex, 
+        'cpu_index': cpuIndex, 
+        'cpu_model': cpuModel, 
+        'gpu_index': gpuIndex, 
+        'gpu_model': gpuModel, 
+        'price': price, 
+        'desc': desc
+      }
+      console.log(laptop)
+      data.push(laptop)
+
+  window.cbl.sortData = ()->
+    # TODO implement
+    data = []
+    $rowsData = $('table tr.row_data')
+    $rowsDesc = $('table tr.row_desc')
+    $($rowsData).each (index, $rowData)->
+      $rowDesc = $($rowsDesc)[index]
+      $($rowData).detach()
+      $($rowDesc).detach()
+      data.push()
 
   # TODO only get CPU and GPU data if there is some data
   $([window.cbl.CPUS, window.cbl.GPUS]).each( (index, value)->
     $.getJSON '/notebookcheck/' + value + '.json', (resp)->
       window.cbl[value] = resp
       window.cbl[value + '_data'] = new Bloodhound({
-        datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        datumTokenizer: window.cbl.tokenize,
+        queryTokenizer: window.cbl.tokenize,
         limit: 5,
         local: resp
       })
      
       window.cbl[value + '_data'].initialize();
   )
-  $('table td.laptop_name').click (event)->
-    $parent = $(this).parent()
+
+  # Events
+  $('table td.laptop_name a').click (event)->
+    event.preventDefault()
+    $parent = $(this).parent().parent()
     $row = $parent.next()
     $laptop_desc = $row.find('td.laptop_desc')
     if $laptop_desc.hasClass('hidden')
@@ -35,20 +88,22 @@ $(document).ready ->
       $laptop_desc.show()
     else
       $laptop_desc.toggle()
-
-    $glyphicon = $parent.find('td.laptop_name span.glyphicon')
-    collapseDown = 'glyphicon-collapse-down'
-    collapseUp = 'glyphicon-collapse-up'
-    if $glyphicon.hasClass(collapseDown)
-      $glyphicon.removeClass(collapseDown)
-      $glyphicon.addClass(collapseUp)
-    else
-      $glyphicon.removeClass(collapseUp)
-      $glyphicon.addClass(collapseDown)
-      
     return
 
-  # Events
+  $('form #clear_btn').click (event)->
+    event.preventDefault()
+    $('#laptops').val('')
+    $('#delimiter').val('')
+    $('#delimiter').prop('disabled', true)
+    $('#use_delimiter').prop('checked', false)
+    return
+
+  $('div.checkbox label,div.checkbox input#use_delimiter').click (event)->
+    if $('input#use_delimiter').is(':checked')
+      $('#delimiter').prop('disabled', false)
+    else
+      $('#delimiter').prop('disabled', true)
+  
   $('table td button.remove').click (event)->
     parent = $(this).parent().parent()
     parent.next().remove()
@@ -65,10 +120,13 @@ $(document).ready ->
     $([window.cbl.CPU, window.cbl.GPU]).each( (index, value)->
       $model = parent.find('.' + value + '_model')
       $model.removeClass(window.cbl.CLASSES.BG_DANGER)
+      model = $model.text().trim()
       $model.empty()
 
       $input = $('<input>', {'class': 'form-control input-sm'})
       $input.appendTo($model)
+      if model != window.cbl.UNKNOWN
+        $input.val(model)
       window.cbl.applyTypeahead($input, value)
     )
 
@@ -95,12 +153,10 @@ $(document).ready ->
           url = window.cbl.CPUS_URL
         else 
           url = window.cbl.GPUS_URL
-        # adding link to cpu/gpu model
         $a = $('<a></a>', {'target': '_blank', 'href': processorData['href']})
         $a.text(model)
         $a.appendTo($model)
         
-        # adding link to cpu/gpu index
         $index = parent.find('.' + value + '_index')
         $index.empty()
         $aIndex = $('<a></a>', {'target': '_blank', 'href': url})
@@ -108,6 +164,15 @@ $(document).ready ->
         $aIndex.appendTo($index)
       return
     )
+    # setting average index
+    cpuIndex = parseInt($(parent).find('.' + window.cbl.CPU + '_index a').text())
+    gpuIndex = parseInt($(parent).find('.' + window.cbl.GPU + '_index a').text())
+    $avgIndex = parent.find('.avg_index')
+    if isNaN(cpuIndex) || isNaN(gpuIndex)
+      avgIndex = -1
+    else
+      avgIndex = (cpuIndex + gpuIndex) /2
+    $avgIndex.text(avgIndex)
     
     $edit = parent.find('.edit')
     $edit.removeClass('hidden')
