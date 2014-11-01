@@ -78,7 +78,7 @@ $(document).ready ->
       return
     )
 
-    if $previousRow != undefined
+    if $previousRow != undefined && $previousRow[0] != $rowElement[0]
       $rowElement.detach()
       $rowDesc.detach()
       $previousRowDesc = $previousRow.next()
@@ -186,6 +186,13 @@ $(document).ready ->
         $input.val(model)
       window.cbl.applyTypeahead($input, value)
     )
+    # price editing
+    $price = $(parent.find('td.price'))
+    price = $price.text().trim()
+    $price.empty()
+    $input = $('<input>', {'class': 'price form-control input-sm'})
+    $input.appendTo($price)
+    $input.val(price)
 
     $apply = parent.find('.apply')
     $apply.removeClass('hidden')
@@ -238,6 +245,12 @@ $(document).ready ->
         $aIndex.appendTo($index)
       return
     )
+
+    # price 
+    $price = $(parent.find('td.price'))
+    price = $price.find('input.price').val().trim()
+    $price.empty()
+    $price.text(price)
 
     # setting average index
     cpuIndex = parseInt($(parent).find('.' + window.cbl.CPU + '_index a').text())
