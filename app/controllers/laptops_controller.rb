@@ -1,17 +1,33 @@
 class LaptopsController < ApplicationController
+  include QueryHelper
   include LaptopsHelper
   include NotebookcheckHelper
   def index
-    # TODO add url to CPU and GPU to correct indecies
-    puts params
-    @laptops = params[:laptops]
-    delimiter = params[:delimiter]
+    result = nil
+    hash = params[:q]
+    result = get_query(hash) unless hash.nil?
+    if !hash.nil? && !result.nil?
+      @laptops = result[:query_string]
+      delimiter = result[:delimiter]
+    else
+      @laptops = params[:laptops]
+      delimiter = params[:delimiter]
+    end
+    
     if delimiter.nil? or delimiter.strip.length == 0
       @delimiter = nil
     else
       @delimiter = delimiter.strip
     end
-    @use_delimiter = params[:use_delimiter] == 'yes' && !@delimiter.nil? ? true : false
+
+    if params[:use_delimiter] == 'yes' && !@delimiter.nil?
+      @use_delimiter = true
+    elsif params[:use_delimiter].nil? && !hash.nil? && !@delimiter.nil?
+      @use_delimiter = true
+    else
+      @use_delimiter = false
+    end
+
     @cpu_href = @@cpu_url
     @gpu_href = @@gpu_url
 

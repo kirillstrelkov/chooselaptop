@@ -60,5 +60,6 @@ Goodlaptop::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
+  # Do not dump schema after migrations.
+  config.active_record.dump_schema_after_migration = false
 end

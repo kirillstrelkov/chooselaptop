@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  hash_string: 27213eaeb427ddcd3d9d77e7770bb40f
+  delimiter: EUR
+  query_string: qwienqowenqwoEURpdmfpdsmfpdsfEUR
+
+two:
+  hash_string: 8b806d820756dbff2db035554d28e83c
+  delimiter: LL
+  query_string: oweqrnowernoLLperwenfdsLL sdf dsfllLL324

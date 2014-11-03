@@ -5,5 +5,7 @@ class LaptopsControllerTest < ActionController::TestCase
     get :index
     assert_response :success
   end
-
+# TODO add test get index with 'q' in params
+# TODO add test get index using post form
+# TODO add test get index without any params
 end

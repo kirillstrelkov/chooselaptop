@@ -84,6 +84,7 @@ $(document).ready ->
       $previousRowDesc = $previousRow.next()
       $rowElement.insertAfter($previousRowDesc)
       $rowDesc.insertAfter($rowElement)
+      $rowDesc.find('td').hide()
       return
 
   window.cbl.fixIndecies = ()->
@@ -165,7 +166,28 @@ $(document).ready ->
     else
       $('#delimiter').prop('disabled', true)
 
-  # Row/Laptop events
+  # Results events
+  $('#share_results').click (event)->
+    #$.post ->
+    # TOOD call post with delimiter and query then get hash from response
+    #hash = '5f9875fcc59f4da17a0ad4908eb53c53'
+    #link_to_share = window.location.origin + window.location.pathname + '?q=' + '5f9875fcc59f4da17a0ad4908eb53c53'
+    #link_to_share
+    #popoverId = $('#share_results').attr('aria-describedby')
+    $share_results = $(this)
+    $share_results.button('loading')
+    query = $('#laptops').val()
+    delimiter = $('#delimiter').val()
+    $.post('/query', {'query' : query, 'delimiter': delimiter}, (resp)->
+      $share_results.button('reset')
+      hash = resp['hash_string']
+      url = window.location.origin + window.location.pathname + '?q=' + hash
+      content = "<input class='form-control input-sm' value='" + url + "'>"
+      $share_results.popover({html: true, delay: 500, placement: 'left', 'content': content}).popover('show')
+    )
+    return
+    #$('#share_results').popover({html: true})
+
   $('table td button.remove').click (event)->
     parent = $(this).parent().parent()
     parent.next().remove()

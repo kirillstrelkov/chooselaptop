@@ -3,30 +3,7 @@ require 'test_helper'
 
 class TextParserTest < ActionView::TestCase
   include TextParser
-=begin
-# generates Hash for cpu and gpu
 
-class GenerateHashes < Test::Unit::TestCase
-@@parser =  Parser.new
-@@laptops = IO.readlines('laptops_descs.csv')
-def test_generate_cpus
-puts "{"
-@@laptops.each do |laptop|
-cpu = @@parser.get_cpu(laptop)
-puts %Q{%Q[#{laptop.strip}] => "#{cpu}",}
-end
-puts "}"
-end
-def test_generate_gpus
-puts "{"
-@@laptops.each do |laptop|
-gpu = @@parser.get_gpu(laptop)
-puts %Q{%Q[#{laptop.strip}] => "#{gpu}",}
-end
-puts "}"
-end
-end
-=end
   def test_get_cpu_from_text_single
     data = %Q[17.3" (1600x900) led glare hd+, intel core i5-4210m 2.6ghz, 4gb ddr3-1600, intel hd 4600, 1tb 5400rpm, sm dvd+-rw, dos, Беспроводной  b/g/n, Камера, 1xusb...]
     assert_equal(get_cpu_from_text(data), "intel 4210m")
