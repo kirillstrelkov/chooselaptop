@@ -46,16 +46,17 @@
       %div{:class => 'col-md-2 col-md-offset-7'}
         %button{:id => 'share_results', :class => 'btn btn-info pull-right', 'data-loading-text'=>"Generating link to share, please wait..."}
           Share results
+    %div{:class => 'row'}
       %div{:class => 'col-md-12'}
         %table{:class => 'table table-condensed'}
           %thead
             %tr
               %th #
               %th Name
-              %th Average index
-              %th CPU index
+              %th Average rating
+              %th CPU rating
               %th CPU model
-              %th GPU index
+              %th GPU rating
               %th GPU model
               %th Price
               %th Actions
@@ -101,4 +102,6 @@
                     Remove
               %tr{:class => 'row_desc'}
                 %td{:colspan => 9,:class => 'laptop_desc hidden'}
-                  =laptop[:desc]
+                  %p
+                    =laptop[:desc].strip()
+                    %span{:class => 'fixed_data'}

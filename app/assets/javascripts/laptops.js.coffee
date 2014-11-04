@@ -4,6 +4,7 @@
 $(document).ready ->
   # Common functionality
   window.cbl = {}
+  window.cbl.checks = {}
   window.cbl.CPU = 'cpu'
   window.cbl.GPU = 'gpu'
   window.cbl.CPUS = 'cpus'
@@ -14,6 +15,27 @@ $(document).ready ->
   window.cbl.CLASSES = {BG_DANGER: 'bg-danger'}
 
   # Functions
+  # Checks
+  window.cbl.checks.isAvgCorrect = (parent)->
+    avgIndex = parseInt($(parent).find('.avg_index').text())
+    return !isNaN(avgIndex) && avgIndex > 0
+
+  window.cbl.checks.isCpuCorrect = (parent)->
+    cpuIndex = parseInt($(parent).find('.cpu_index').text())
+    return !isNaN(cpuIndex) && cpuIndex > 0
+
+  window.cbl.checks.isGpuCorrect = (parent)->
+    gpuIndex = parseInt($(parent).find('.gpu_index').text())
+    return !isNaN(gpuIndex) && gpuIndex > 0
+
+  window.cbl.checks.isPriceCorrect = (parent)->
+    price = parseInt($(parent).find('.price').text())
+    return !isNaN(price) && price > 0.0
+
+  window.cbl.checks.isCorrectData = (parent)->
+    return window.cbl.checks.isAvgCorrect(parent) && window.cbl.checks.isCpuCorrect(parent) && window.cbl.checks.isGpuCorrect(parent) && window.cbl.checks.isPriceCorrect(parent)
+
+  # Common functions
   window.cbl.tokenize = (objOrName)->
     if typeof objOrName == 'object'
       objOrName = objOrName['name']
@@ -124,6 +146,21 @@ $(document).ready ->
       source: data.ttAdapter()
     })
 
+  window.cbl.updateDesc = (laptopDataRow, laptopDescRow)->
+    $laptopDescRow = $(laptopDescRow)
+    $laptopDataRow = $(laptopDataRow)
+    desc = ';'
+    if window.cbl.checks.isCpuCorrect($laptopDataRow)
+      cpu = $laptopDataRow.find('.cpu_model').text()
+      desc += cpu + ','
+    if window.cbl.checks.isGpuCorrect($laptopDataRow)
+      gpu = $laptopDataRow.find('.gpu_model').text()
+      desc += gpu + ','
+    if window.cbl.checks.isPriceCorrect($laptopDataRow)
+      price = $laptopDataRow.find('.price').text()
+      desc += price
+    $laptopDescRow.find('.fixed_data').text(desc)
+
   # Onload fuctions
   # TODO only get CPU and GPU data if there is some data
   $([window.cbl.CPUS, window.cbl.GPUS]).each( (index, value)->
@@ -170,23 +207,22 @@ $(document).ready ->
   $('#share_results').click (event)->
     #$.post ->
     # TOOD call post with delimiter and query then get hash from response
-    #hash = '5f9875fcc59f4da17a0ad4908eb53c53'
-    #link_to_share = window.location.origin + window.location.pathname + '?q=' + '5f9875fcc59f4da17a0ad4908eb53c53'
-    #link_to_share
-    #popoverId = $('#share_results').attr('aria-describedby')
     $share_results = $(this)
     $share_results.button('loading')
-    query = $('#laptops').val()
+    descriptions = $.map($('td.laptop_desc'), (val)->
+      $(val).text().trim().replace(/\s{2,}/g, ' ')
+    )
     delimiter = $('#delimiter').val()
+    query = descriptions.join(' ' + delimiter + '\n\n')
     $.post('/query', {'query' : query, 'delimiter': delimiter}, (resp)->
       $share_results.button('reset')
       hash = resp['hash_string']
       url = window.location.origin + window.location.pathname + '?q=' + hash
       content = "<input class='form-control input-sm' value='" + url + "'>"
-      $share_results.popover({html: true, delay: 500, placement: 'left', 'content': content}).popover('show')
+      # TODO fix popover
+      $share_results.popover({container: '.container', html: true, delay: 500, placement: 'left', 'content': content}).popover('show')
     )
     return
-    #$('#share_results').popover({html: true})
 
   $('table td button.remove').click (event)->
     parent = $(this).parent().parent()
@@ -226,14 +262,6 @@ $(document).ready ->
   $('table td button.apply').click (event)->
     parent = $(this).parent().parent()
     
-    # inner functions
-    isCorrectData = ()->
-      avgIndex = parseInt($(parent).find('.avg_index').text())
-      cpuIndex =parseInt($(parent).find('.cpu_index').text())
-      gpuIndex = parseInt($(parent).find('.gpu_index').text())
-      price = parseFloat($(parent).find('.price').text())
-      return !isNaN(avgIndex) && !isNaN(cpuIndex) && !isNaN(gpuIndex) && !isNaN(price) && avgIndex > 0 && cpuIndex > 0 && gpuIndex > 0 && price > 0.0
-
     fixClass = (element, oldClass, newClass)->
       if $(element).hasClass(oldClass)
         $(element).removeClass(oldClass)
@@ -278,7 +306,7 @@ $(document).ready ->
     cpuIndex = parseInt($(parent).find('.' + window.cbl.CPU + '_index a').text())
     gpuIndex = parseInt($(parent).find('.' + window.cbl.GPU + '_index a').text())
     $avgIndex = parent.find('.avg_index')
-    if isNaN(cpuIndex) || isNaN(gpuIndex)
+    if !window.cbl.checks.isCpuCorrect(parent) || !window.cbl.checks.isGpuCorrect(parent)
       avgIndex = -1
     else
       avgIndex = parseInt((cpuIndex + gpuIndex) / 2)
@@ -289,9 +317,12 @@ $(document).ready ->
     $edit.show()
     $apply = $(event.target)
     $apply.hide()
+
+    window.cbl.updateDesc(parent, parent.next())
+    
     window.cbl.moveToCorrectRow($(parent))
-    if isCorrectData()
-      # TODO fix description
+
+    if window.cbl.checks.isCorrectData(parent)
       # TODO fix message
       # TODO add OK message - green when all OK
       fixClass($edit, 'btn-warning', 'btn-default')
