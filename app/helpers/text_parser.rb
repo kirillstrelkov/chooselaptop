@@ -50,13 +50,13 @@ module TextParser
     ideal_nvidia_regexp = /nvidia ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/
     geforce_regexp = /geforce ?[a-z]* ?[a-z]* ?(\d{3,}\w{0,2})/
     regexps = {
-      ideal_intel_regexp => 'intel',
-      intel_hd_regexp => 'intel',
       ideal_amd_regexp => 'amd',
       ati_regexp => 'amd',
       ati_regexp_2 => 'amd',
       ideal_nvidia_regexp => 'nvidia',
       geforce_regexp => 'nvidia',
+      ideal_intel_regexp => 'intel',
+      intel_hd_regexp => 'intel',
       intel_hd_regexp2 => 'intel'
     }
 

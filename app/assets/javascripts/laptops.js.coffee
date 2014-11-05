@@ -152,10 +152,10 @@ $(document).ready ->
     desc = ';'
     if window.cbl.checks.isCpuCorrect($laptopDataRow)
       cpu = $laptopDataRow.find('.cpu_model').text()
-      desc += cpu + ','
+      desc += cpu + ';'
     if window.cbl.checks.isGpuCorrect($laptopDataRow)
       gpu = $laptopDataRow.find('.gpu_model').text()
-      desc += gpu + ','
+      desc += gpu + ';'
     if window.cbl.checks.isPriceCorrect($laptopDataRow)
       price = $laptopDataRow.find('.price').text()
       desc += price

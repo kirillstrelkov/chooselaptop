@@ -246,10 +246,15 @@ class TextParserTest < ActionView::TestCase
   end
   
   def test_get_gpu_from_text_1
-    assert_equal( 'nvidia 720', get_gpu_from_text("GeForce GT720M"))
+    assert_equal( 'nvidia 720m', get_gpu_from_text("GeForce GT720M"))
   end
-  
-  def test_get_gpu_from_text_1
+
+  def test_get_gpu_from_text_2
+    assert_equal('nvidia 720', get_gpu_from_text("intel hd 4600 nvidia 720"))
+    assert_equal('nvidia 720', get_gpu_from_text("nvidia 720 intel hd 4600"))
+  end
+
+  def test_get_gpu_from_text_3
     assert_equal( 'nvidia 740m', get_gpu_from_text("NVIDIA® GeForce® GT 740M 2GB"))
   end
 
