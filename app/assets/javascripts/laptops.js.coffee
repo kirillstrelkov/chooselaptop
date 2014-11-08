@@ -1,6 +1,24 @@
 # Place all the behaviors and hooks related to the matching controller here.
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+((i, s, o, g, r, a, m) ->
+    i["GoogleAnalyticsObject"] = r
+    i[r] = i[r] or ->
+      (i[r].q = i[r].q or []).push arguments
+
+    i[r].l = 1 * new Date()
+
+    a = s.createElement(o)
+    m = s.getElementsByTagName(o)[0]
+
+    a.async = 1
+    a.src = g
+    m.parentNode.insertBefore a, m
+  ) window, document, "script", "//www.google-analytics.com/analytics.js", "ga"
+ga('create', 'UA-56554035-1', 'auto')
+ga('send', 'pageview')
+
+
 $(document).ready ->
   # Common functionality
   window.cbl = {}
