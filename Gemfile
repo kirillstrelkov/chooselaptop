@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.14'
+gem 'rails', '3.1.1'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
@@ -13,7 +13,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   
   gem 'sprockets-rails', '~> 2.0.0.backport1'
-  gem 'sprockets', '~> 2.2.2.backport2'
+  gem 'sprockets', github: 'tessi/sprockets', branch: '2_2_2_backport2'
   gem 'sass-rails', github: 'guilleiguaran/sass-rails', branch: 'backport'
 
   gem 'bootstrap-sass', '~> 3.2.0'
