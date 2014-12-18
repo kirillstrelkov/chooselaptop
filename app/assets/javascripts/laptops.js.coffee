@@ -223,8 +223,6 @@ $(document).ready ->
 
   # Results events
   $('#share_results').click (event)->
-    #$.post ->
-    # TOOD call post with delimiter and query then get hash from response
     $share_results = $(this)
     $share_results.button('loading')
     descriptions = $.map($('td.laptop_desc'), (val)->
