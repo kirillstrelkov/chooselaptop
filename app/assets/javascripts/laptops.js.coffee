@@ -180,7 +180,6 @@ $(document).ready ->
     $laptopDescRow.find('.fixed_data').text(desc)
 
   # Onload fuctions
-  # TODO only get CPU and GPU data if there is some data
   $([window.cbl.CPUS, window.cbl.GPUS]).each( (index, value)->
     $.getJSON '/notebookcheck/' + value + '.json', (resp)->
       window.cbl[value] = resp
@@ -223,21 +222,24 @@ $(document).ready ->
 
   # Results events
   $('#share_results').click (event)->
-    $share_results = $(this)
-    $share_results.button('loading')
-    descriptions = $.map($('td.laptop_desc'), (val)->
-      $(val).text().trim().replace(/\s{2,}/g, ' ')
-    )
-    delimiter = $('#delimiter').val()
-    query = descriptions.join(' ' + delimiter + '\n\n')
-    $.post('/query', {'query' : query, 'delimiter': delimiter}, (resp)->
-      $share_results.button('reset')
-      hash = resp['hash_string']
-      url = window.location.origin + window.location.pathname + '?q=' + hash
-      content = "<input class='form-control input-sm' value='" + url + "'>"
-      # TODO fix popover
-      $share_results.popover({container: '.container', html: true, delay: 500, placement: 'left', 'content': content}).popover('show')
-    )
+    popover = $('.popover')
+    if popover.length > 0
+      popover.remove()
+    else
+      $share_results = $(this)
+      $share_results.button('loading')
+      descriptions = $.map($('td.laptop_desc'), (val)->
+        $(val).text().trim().replace(/\s{2,}/g, ' ')
+      )
+      delimiter = $('#delimiter').val()
+      query = descriptions.join(' ' + delimiter + '\n\n')
+      $.post('/query', {'query' : query, 'delimiter': delimiter}, (resp)->
+        $share_results.button('reset')
+        hash = resp['hash_string']
+        url = window.location.origin + window.location.pathname + '?q=' + hash
+        content = "<a href='#{url}' target='_blank'>#{url}</a>"
+        $share_results.popover({container: '.container', html: true, delay: 500, placement: 'left', 'content': content}).popover('show')
+      )
     return
 
   $('table td button.remove').click (event)->
@@ -339,8 +341,6 @@ $(document).ready ->
     window.cbl.moveToCorrectRow($(parent))
 
     if window.cbl.checks.isCorrectData(parent)
-      # TODO fix message
-      # TODO add OK message - green when all OK
       fixClass($edit, 'btn-warning', 'btn-default')
     else
       fixClass($edit, 'btn-default', 'btn-warning')
