@@ -61,6 +61,11 @@
           %strong
             pay attention
           to:
+          %button{:type => 'button', :class => 'close', 'data-dismiss' => 'alert'}
+            %span{'aria-hidden' => 'true'}
+              &times;
+            %span{:class => 'sr-only'}
+              Close
           %ul
             %li
               Display size, resolution and type
@@ -71,11 +76,6 @@
               =link_to 'HDD', 'http://en.wikipedia.org/wiki/Hard_disk_drive', :title => 'Hard disk drive', :target => '_blank'
               or
               =link_to 'SSD', 'http://en.wikipedia.org/wiki/Solid-state_drive', :title => 'Solid state drive', :target => '_blank'
-              %button{:type => 'button', :class => 'close', 'data-dismiss' => 'alert'}
-                %span{'aria-hidden' => 'true'}
-                  &times;
-                %span{:class => 'sr-only'}
-                  Close
             %li
               =link_to 'OS', 'http://en.wikipedia.org/wiki/Operating_system', :title => 'Operating system', :target => '_blank'
             %li

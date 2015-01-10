@@ -1,0 +1,15 @@
+!!!
+%html
+  %head
+    %title
+      =@title
+    = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
+    = csrf_meta_tags
+    %meta{:content => "c6RYH9hm0G85TJD1lHHtzPGXfRlQpdvqd8oqFgThTdg", :name => "google-site-verification"}
+    %meta{:content => @description, :name => "description"}
+    %meta{:content => @title, :name => 'og:title'}
+    %meta{:content => @description, :name => 'og:description'}
+    %meta{:content => asset_path("share_picture.png"), :name => 'og:image'}
+  %body
+    = yield

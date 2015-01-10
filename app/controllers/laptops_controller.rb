@@ -3,6 +3,8 @@ class LaptopsController < ApplicationController
   include LaptopsHelper
   include NotebookcheckHelper
   def index
+    @description = DEFAULT_DESC
+    @title = DEFAULT_TITLE
     result = nil
     hash = params[:q]
     result = get_query(hash) unless hash.nil?
@@ -40,6 +42,8 @@ class LaptopsController < ApplicationController
       if @sorted_laptops
         @good_laptops_count = get_good_laptops_count(@sorted_laptops)
         @bad_laptops_count = get_bad_laptops_count(@sorted_laptops)
+        @title = "#{@sorted_laptops.length} laptops sorted by CPU, GPU and price"
+        @description = "Which laptop has the best CPU, GPU and price between #{@sorted_laptops.length} laptops"
       end
     else
       @sorted_laptops = []

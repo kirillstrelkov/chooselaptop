@@ -1,7 +1,10 @@
 module LaptopsHelper
   include TextParser
   include NotebookcheckHelper
+  DEFAULT_TITLE = "Choose best laptop between several ones"
+  DEFAULT_DESC = "If you are tired of comparing multiple laptops' features and don't know which one to choose. This site will try to help you by sorting entered laptop by CPU/GPU rating and price. Functionality is based on CPU/GPU benchmarks from http://www.notebookcheck.net/ web site."
   @@delimiter = /\n{2,}/
+
   def get_sorted_laptops(laptops)
     all_cpu_data = get_all_cpu_data_from_notebookcheck
     all_gpu_data = get_all_gpu_data_from_notebookcheck
@@ -18,7 +21,7 @@ module LaptopsHelper
         if cpu_data[:index] != -1 and gpu_data[:index] != -1
           avg_index = ((cpu_data[:index] + gpu_data[:index]) / 2.0).to_i
         else
-        avg_index = -1
+          avg_index = -1
         end
 
         sorted_laptops << {
