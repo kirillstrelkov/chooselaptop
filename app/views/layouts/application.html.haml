@@ -11,5 +11,6 @@
     %meta{:content => @title, :name => 'og:title'}
     %meta{:content => @description, :name => 'og:description'}
     %meta{:content => asset_path("share_picture.png"), :name => 'og:image'}
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}
   %body
     = yield
