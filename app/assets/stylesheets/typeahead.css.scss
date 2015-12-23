@@ -1,4 +1,4 @@
-span.twitter-typeahead .tt-dropdown-menu {
+.twitter-typeahead .tt-menu {
   position: absolute;
   top: 100%;
   left: 0;
@@ -19,7 +19,7 @@ span.twitter-typeahead .tt-dropdown-menu {
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
   background-clip: padding-box;
 }
-span.twitter-typeahead .tt-suggestion > p {
+.twitter-typeahead .tt-suggestion {
   display: block;
   padding: 3px 20px;
   clear: both;
@@ -28,30 +28,33 @@ span.twitter-typeahead .tt-suggestion > p {
   color: #333333;
   white-space: nowrap;
 }
-span.twitter-typeahead .tt-suggestion > p:hover,
-span.twitter-typeahead .tt-suggestion > p:focus {
+
+.twitter-typeahead .tt-suggestion:hover,
+.twitter-typeahead .tt-suggestion:focus {
   color: #ffffff;
   text-decoration: none;
   outline: 0;
   background-color: #428bca;
+  cursor: pointer;
 }
-span.twitter-typeahead .tt-suggestion.tt-cursor {
+
+.twitter-typeahead .tt-suggestion.tt-cursor {
   color: #ffffff;
   background-color: #428bca;
 }
-span.twitter-typeahead {
+.twitter-typeahead {
   width: 100%;
 }
-.input-group span.twitter-typeahead {
+
+.twitter-typeahead {
   display: block !important;
 }
-.input-group span.twitter-typeahead .tt-dropdown-menu {
+.twitter-typeahead .tt-dropdown-menu {
   top: 32px !important;
 }
-.input-group.input-group-lg span.twitter-typeahead .tt-dropdown-menu {
+.twitter-typeahead .tt-dropdown-menu {
   top: 44px !important;
 }
-.input-group.input-group-sm span.twitter-typeahead .tt-dropdown-menu {
+.twitter-typeahead .tt-dropdown-menu {
   top: 28px !important;
 }
-
