@@ -97,17 +97,17 @@
             laptops: 
             %mark
               #{@good_laptops_count} 
-            laptops with good data and
+            laptops with full data and
             %mark
               #{@bad_laptops_count} 
-            \- with bad data.
+            \- with missing data.
             %strong
-              Please edit or remove laptops with bad data.
+              Please edit or remove laptops with missing data.
           -else
             Found 
             %mark
               #{@good_laptops_count + @bad_laptops_count} 
-            laptops with good data.
+            laptops with full data.
           %button{:type => 'button', :class => 'close', 'data-dismiss' => 'alert'}
             %span{'aria-hidden' => 'true'}
               &times;
@@ -126,49 +126,68 @@
           %thead
             %tr
               %th #
-              %th Name
+              %th{class: 'col-md-4'} Name
               %th Average rating
               %th CPU rating
-              %th CPU model
+              %th{class: 'col-md-3'} CPU model
               %th GPU rating
-              %th GPU model
+              %th{class: 'col-md-3'} GPU model
               %th Price
-              %th Actions
+              %th{class: 'col-md-2'} Actions
           %tbody
             -@sorted_laptops.each  do |laptop|
               -index = @sorted_laptops.index(laptop) + 1
+              -avg_perc_formatted = format_percentage(laptop[:avg_percentage])
+              -cpu_perc = laptop[:cpu_percentage]
+              -gpu_perc = laptop[:gpu_percentage]
+              -bad_data = 'Not found'
+              -is_bad_gpu = gpu_perc == 101
+              -is_bad_cpu = cpu_perc == 101
               %tr{:class => 'row_data'}
                 %td
                   =index
                 %td{:class => 'laptop_name'}
                   %a{:href => '#', :title=> 'Toggle laptop\'s description'}
-                    =laptop[:desc].slice(0, 35) + '...'
-                %td{:class => 'avg_index'}
-                  =laptop[:avg_index]
-                %td{:class => 'cpu_index'}
-                  -if laptop[:cpu_index] != -1
-                    =link_to laptop[:cpu_index], @cpu_href, :target => '_blank'
+                    =laptop[:desc].slice(0, 30) + '...'
+                %td{:class => 'avg_percentage ' + (is_bad_cpu || is_bad_gpu ? 'bg-danger' : '')}
+                  -if is_bad_cpu || is_bad_gpu
+                    =bad_data
                   -else
-                    =laptop[:cpu_index]
-                %td{:class => 'cpu_model ' + (laptop[:cpu_index] == -1 ? 'bg-danger' : '')}
-                  -if laptop[:cpu_index] != -1
+                    %span{'data-toggle' => "tooltip",
+                          title: "On average CPU and GPU are better then #{avg_perc_formatted} others",
+                          'data-container' => "body"}
+                      =avg_perc_formatted
+                %td{:class => 'cpu_percentage ' + (is_bad_cpu ? 'bg-danger' : '')}
+                  -if is_bad_cpu
+                    =bad_data
+                  -else
+                    =link_to format_percentage(cpu_perc), @cpu_href, :target => 'blank',
+                        'data-toggle' => "tooltip",
+                        title: "CPU performance is better then #{format_percentage(cpu_perc)} of CPUs",
+                        'data-container' => "body"
+                %td{:class => 'cpu_model ' + (is_bad_cpu ? 'bg-danger' : '')}
+                  -if is_bad_cpu
+                    =bad_data
+                  -else
                     =link_to laptop[:cpu_model], laptop[:cpu_model_href], :target => '_blank'
+                %td{:class => 'gpu_percentage ' + (is_bad_gpu ? 'bg-danger' : '')}
+                  -if is_bad_gpu
+                    =bad_data
                   -else
-                    =laptop[:cpu_model]
-                %td{:class => 'gpu_index'}
-                  -if laptop[:gpu_index] != -1
-                    =link_to laptop[:gpu_index], @gpu_href, :target => '_blank'
+                    =link_to format_percentage(gpu_perc), @gpu_href, :target => '_blank',
+                        'data-toggle' => "tooltip",
+                        title: "GPU performance is better then #{format_percentage(gpu_perc)} of GPUs",
+                        'data-container' => "body"
+
+                %td{:class => 'gpu_model ' + (is_bad_gpu ? 'bg-danger' : '')}
+                  -if is_bad_gpu
+                    =bad_data
                   -else
-                    =laptop[:gpu_index]
-                %td{:class => 'gpu_model ' + (laptop[:gpu_index] == -1 ? 'bg-danger' : '')}
-                  -if laptop[:gpu_index] != -1
                     =link_to laptop[:gpu_model], laptop[:gpu_model_href], :target => '_blank'
-                  -else
-                    =laptop[:gpu_model]
                 %td{:class => 'price'}
                   #{'%.2f' % laptop[:price]}
                 %td
-                  %button{:class => 'btn btn-xs edit ' + (laptop[:gpu_index] == -1 || laptop[:cpu_index] == -1 ? 'btn-warning' : 'btn-default'), :title => 'Edit laptop\'s CPU/GPU model and price'}
+                  %button{:class => 'btn btn-xs edit ' + (is_bad_cpu || is_bad_gpu ? 'btn-warning' : 'btn-default'), :title => 'Edit laptop\'s CPU/GPU model and price'}
                     Edit
                   %button{:class => 'btn btn-success btn-xs apply hidden', :title => 'Apply changes and put laptop into correct row'}
                     Apply

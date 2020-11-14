@@ -14,6 +14,9 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
+table td.avg_percentage, td.cpu_percentage, td.gpu_percentage {
+  min-width: 80px;
+}
 table tr input.price {
   width: 65px;
 }

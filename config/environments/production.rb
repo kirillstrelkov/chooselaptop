@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Goodlaptop::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
@@ -61,4 +63,6 @@ Goodlaptop::Application.configure do
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
   # Do not dump schema after migrations.
+  #
+  config.eager_load = true
 end

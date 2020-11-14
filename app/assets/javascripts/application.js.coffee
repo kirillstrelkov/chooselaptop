@@ -32,28 +32,28 @@ $(document).ready ->
   window.cbl.GPU = 'gpu'
   window.cbl.CPUS = 'cpus'
   window.cbl.GPUS = 'gpus'
-  window.cbl.CPUS_URL = 'http://www.notebookcheck.net/Mobile-Processors-Benchmarklist.2436.0.html'
-  window.cbl.GPUS_URL = 'http://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1'
-  window.cbl.UNKNOWN = 'unknown'
+  window.cbl.CPUS_URL = 'https://www.notebookcheck.net/Mobile-Processors-Benchmark-List.2436.0.html?&deskornote=2&or=0&cpu_fullname=1&cores=1&threads=1'
+  window.cbl.GPUS_URL = 'https://www.notebookcheck.net/Mobile-Graphics-Cards-Benchmark-List.844.0.html?multiplegpus=1&or=0&gpu_fullname=1'
+  window.cbl.NOT_FOUND = 'Not found'
   window.cbl.CLASSES = {BG_DANGER: 'bg-danger'}
 
   # Functions
   # Checks
   window.cbl.checks.isAvgCorrect = (parent)->
-    avgIndex = parseInt($(parent).find('.avg_index').text())
+    avgIndex = parseInt($(parent).find('.avg_percentage').text())
     return !isNaN(avgIndex) && avgIndex > 0
 
   window.cbl.checks.isCpuCorrect = (parent)->
-    cpuIndex = parseInt($(parent).find('.cpu_index').text())
+    cpuIndex = parseInt($(parent).find('.cpu_percentage').text())
     return !isNaN(cpuIndex) && cpuIndex > 0
 
   window.cbl.checks.isGpuCorrect = (parent)->
-    gpuIndex = parseInt($(parent).find('.gpu_index').text())
+    gpuIndex = parseInt($(parent).find('.gpu_percentage').text())
     return !isNaN(gpuIndex) && gpuIndex > 0
 
   window.cbl.checks.isPriceCorrect = (parent)->
     price = parseInt($(parent).find('.price').text())
-    return !isNaN(price) && price > 0.0
+    return !isNaN(price) && price >= 0.0
 
   window.cbl.checks.isCorrectData = (parent)->
     return window.cbl.checks.isAvgCorrect(parent) && window.cbl.checks.isCpuCorrect(parent) && window.cbl.checks.isGpuCorrect(parent) && window.cbl.checks.isPriceCorrect(parent)
@@ -73,53 +73,52 @@ $(document).ready ->
     $rowData = $(rowData)
     $rowDesc = $(rowData).next()
     name = $rowData.find('td.laptop_name a').text().trim()
-    avgIndex = $rowData.find('td.avg_index').text().trim()
-    cpuIndex = $rowData.find('td.cpu_index').text().trim()
+    avgIndex = $rowData.find('td.avg_percentage').text().trim()
+    cpuIndex = $rowData.find('td.cpu_percentage').text().trim()
     cpuModel = $rowData.find('td.cpu_model').text().trim()
-    gpuIndex = $rowData.find('td.gpu_index').text().trim()
+    gpuPercentage = $rowData.find('td.gpu_percentage').text().trim()
     gpuModel = $rowData.find('td.gpu_model').text().trim()
     price = $rowData.find('td.price').text().trim()
     desc = $rowDesc.find('td.laptop_desc').text().trim()
     return {
-      'name': name, 
-      'avg_index': avgIndex, 
-      'cpu_index': cpuIndex, 
-      'cpu_model': cpuModel, 
-      'gpu_index': gpuIndex, 
-      'gpu_model': gpuModel, 
-      'price': price, 
+      'name': name,
+      'avg_percentage': avgIndex,
+      'cpu_percentage': cpuIndex,
+      'cpu_model': cpuModel,
+      'gpu_percentage': gpuPercentage,
+      'gpu_model': gpuModel,
+      'price': price,
       'desc': desc
     }
 
   window.cbl.moveToCorrectRow = (rowElement)->
     $rowElement = $(rowElement)
     $rowDesc = $rowElement.next()
-    initialAvgIndex = parseInt($rowElement.find('.avg_index').text())
-    initialCpuIndex =parseInt($rowElement.find('.cpu_index').text())
-    initialGpuIndex = parseInt($rowElement.find('.gpu_index').text())
+    initialAvgPerc = parseFloat($rowElement.find('.avg_percentage').text())
+    initialCpuPerc =parseFloat($rowElement.find('.cpu_percentage').text())
+    initialGpuPerc = parseFloat($rowElement.find('.gpu_percentage').text())
     initialPrice = parseFloat($rowElement.find('.price').text())
     $previousRow = undefined
 
     $('tr.row_data').each( (index, row)->
       $row = $(row)
-      avgIndex = parseInt($row.find('.avg_index').text());
-      cpuIndex = parseInt($row.find('.cpu_index').text());
-      gpuIndex = parseInt($row.find('.gpu_index').text());
+      avgPerc = parseFloat($row.find('.avg_percentage').text());
+      cpuPerc = parseFloat($row.find('.cpu_percentage').text());
+      gpuPerc = parseFloat($row.find('.gpu_percentage').text());
       price = parseFloat($row.find('.price').text());
 
-      if avgIndex < initialAvgIndex
+      if avgPerc > initialAvgPerc
         $previousRow = $row
-      else if avgIndex == initialAvgIndex
-        if cpuIndex < initialCpuIndex
+      else if avgPerc == initialAvgPerc
+        if cpuPerc > initialCpuPerc
           $previousRow = $row
-        else if cpuIndex == initialCpuIndex
-          if gpuIndex < initialGpuIndex
+        else if cpuPerc == initialCpuPerc
+          if gpuPerc > initialGpuPerc
             $previousRow = $row
-          else if gpuIndex == initialGpuIndex
-            if price <= initialPrice
+          else if gpuPerc == initialGpuPerc
+            if price >= initialPrice
               $previousRow = $row
-      else
-        return false
+
       return
     )
 
@@ -140,13 +139,26 @@ $(document).ready ->
         $(tds[0]).text(i)
         i += 1
 
+  window.cbl.updateLaptops = ()->
+    $('#laptops').val('')
+    if $('#use_delimiter').prop('checked')
+      delimiter = $('#delimiter').val()
+      if delimiter.indexOf('\n') == -1
+        delimiter = '\n' + delimiter + '\n'
+    else
+      delimiter = '\n\n'
+    new_text = $('.laptop_desc p').map ()->
+      $(this).text().trim()
+    new_text = new_text.toArray().join(delimiter)
+    $('#laptops').val(new_text)
+
   window.cbl.getProcessorData = (modelName, cpusOrGpus)->
     if cpusOrGpus == window.cbl.CPU
       data = window.cbl[window.cbl.CPUS]
-      index_name = window.cbl.GPU + '_index'
+      index_name = window.cbl.GPU + '_percentage'
     else if cpusOrGpus == window.cbl.GPU
       data = window.cbl[window.cbl.GPUS]
-      index_name = window.cbl.CPU + '_index'
+      index_name = window.cbl.CPU + '_percentage'
     else
       val = undefined
 
@@ -156,6 +168,9 @@ $(document).ready ->
         return false;
     )
     return val
+
+  window.cbl.formatPercentage = (number)->
+    (number*100).toFixed(2).toString() + '%'
 
   window.cbl.applyTypeahead = (inputElement, cpu_or_gpu)->
     data = window.cbl[cpu_or_gpu + 's_data']
@@ -194,8 +209,10 @@ $(document).ready ->
         limit: 5,
         local: resp
       })
-     
+
       window.cbl[value + '_data'].initialize();
+
+      window.cbl[value.toUpperCase() + '_MAX_INDEX'] = window.cbl[value][window.cbl[value].length - 1].index
   )
 
   # Form events
@@ -263,7 +280,7 @@ $(document).ready ->
 
       $input = $('<input>', {'class': 'form-control input-sm'})
       $input.appendTo($model)
-      if model != window.cbl.UNKNOWN
+      if model != window.cbl.NOT_FOUND
         $input.val(model)
       window.cbl.applyTypeahead($input, value)
     )
@@ -281,14 +298,14 @@ $(document).ready ->
 
     $edit = $(event.target)
     $edit.hide()
-    
+
   $('table td button.apply').click (event)->
     parent = $(this).parent().parent()
-    
+
     fixClass = (element, oldClass, newClass)->
       if $(element).hasClass(oldClass)
         $(element).removeClass(oldClass)
-      if !$(element).hasClass(newClass) 
+      if !$(element).hasClass(newClass)
         $(element).addClass(newClass)
       return
 
@@ -296,45 +313,60 @@ $(document).ready ->
       $model = parent.find('.' + value + '_model')
       model = $model.find('input.tt-input').val().trim()
       $model.empty()
-      $index = parent.find('.' + value + '_index')
+      $index = parent.find('.' + value + '_percentage')
       $index.empty()
       processorData = window.cbl.getProcessorData(model, value)
-      if model == window.cbl.UNKNOWN || model.length == 0 || processorData == undefined
-        $model.text(window.cbl.UNKNOWN)
+      if model == window.cbl.NOT_FOUND || model.length == 0 || processorData == undefined
+        $model.text(window.cbl.NOT_FOUND)
         if !$model.hasClass(window.cbl.CLASSES.BG_DANGER)
           $model.addClass(window.cbl.CLASSES.BG_DANGER)
-        $index.text(-1)
+        $index.text(window.cbl.NOT_FOUND)
       else
         if value == window.cbl.CPU
           url = window.cbl.CPUS_URL
-        else 
+          max_index = window.cbl.CPUS_MAX_INDEX
+        else
           url = window.cbl.GPUS_URL
+          max_index = window.cbl.GPUS_MAX_INDEX
         $a = $('<a></a>', {'target': '_blank', 'href': processorData['href']})
         $a.text(model)
         $a.appendTo($model)
-        
+
         $aIndex = $('<a></a>', {'target': '_blank', 'href': url})
-        $aIndex.text(processorData['index'])
+        percentage = 1 - processorData['index'] / max_index
+        $aIndex.text(window.cbl.formatPercentage(percentage))
         $aIndex.appendTo($index)
       return
     )
 
-    # price 
+    # price
     $price = $(parent.find('td.price'))
     price = $price.find('input.price').val().trim()
     $price.empty()
     $price.text(price)
 
     # setting average index
-    cpuIndex = parseInt($(parent).find('.' + window.cbl.CPU + '_index a').text())
-    gpuIndex = parseInt($(parent).find('.' + window.cbl.GPU + '_index a').text())
-    $avgIndex = parent.find('.avg_index')
+    cpuPercentage = parseFloat($(parent).find('.cpu_percentage a').text())
+    gpuPercentage = parseFloat($(parent).find('.gpu_percentage a').text())
+    $avgIndex = parent.find('.avg_percentage')
     if !window.cbl.checks.isCpuCorrect(parent) || !window.cbl.checks.isGpuCorrect(parent)
-      avgIndex = -1
+      avgPercentage = window.cbl.NOT_FOUND
     else
-      avgIndex = parseInt((cpuIndex + gpuIndex) / 2)
-    $avgIndex.text(avgIndex)
-    
+      avgPercentage = window.cbl.formatPercentage((cpuPercentage + gpuPercentage) / 200)
+    $avgIndex.text(avgPercentage)
+
+    # Fixing backgroud
+    $cpu_percentage = $(parent).find('.cpu_percentage')
+    $gpu_percentage = $(parent).find('.gpu_percentage')
+    $avg_percentage = $(parent).find('.avg_percentage')
+
+    if window.cbl.checks.isAvgCorrect(parent)
+      $avg_percentage.removeClass(window.cbl.CLASSES.BG_DANGER)
+    if window.cbl.checks.isCpuCorrect(parent)
+      $cpu_percentage.removeClass(window.cbl.CLASSES.BG_DANGER)
+    if window.cbl.checks.isGpuCorrect(parent)
+      $gpu_percentage.removeClass(window.cbl.CLASSES.BG_DANGER)
+
     $edit = parent.find('.edit')
     $edit.removeClass('hidden')
     $edit.show()
@@ -342,13 +374,16 @@ $(document).ready ->
     $apply.hide()
 
     window.cbl.updateDesc(parent, parent.next())
-    
+
     window.cbl.moveToCorrectRow($(parent))
 
     if window.cbl.checks.isCorrectData(parent)
       fixClass($edit, 'btn-warning', 'btn-default')
+      window.cbl.updateLaptops()
     else
       fixClass($edit, 'btn-default', 'btn-warning')
-      
+
     window.cbl.fixIndecies()
     return
+
+  $('[data-toggle="tooltip"]').tooltip();

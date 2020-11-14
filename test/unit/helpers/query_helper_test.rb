@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class QueryHelperTest < ActionView::TestCase
@@ -35,7 +37,7 @@ class QueryHelperTest < ActionView::TestCase
     assert_equal(query[:delimiter], delimiter)
     assert_equal(query[:query_string], query_string)
     assert_equal(query[:hash_string], expected_hash)
-    
+
     # checking that new query is in DB
     query = get_query(expected_hash)
     assert_equal(query[:delimiter], delimiter)
@@ -60,7 +62,7 @@ class QueryHelperTest < ActionView::TestCase
   end
 
   def test_post_query_with_incorrect_data
-    query = post_query(546546546, 4)
+    query = post_query(546_546_546, 4)
     assert_nil query
   end
 end
