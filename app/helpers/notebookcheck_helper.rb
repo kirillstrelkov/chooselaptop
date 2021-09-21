@@ -56,7 +56,6 @@ module NotebookcheckHelper
         next unless has_all_words_in_name
 
         diff = (name.downcase.scan(regexp) - cpu_or_gpu.downcase.scan(regexp)).length
-        # p [cpu_or_gpu, name, diff]
         if diff < min_diff
           min_diff = diff
           best_data = data

@@ -8,7 +8,6 @@ module TextParser
     text = text.delete('™')
     text = text.gsub('(tm)', '')
     regexps.each do |regexp, prefix|
-      # p regexp
       found = text[regexp]
       next if found.nil?
 
@@ -29,7 +28,7 @@ module TextParser
     ideal_amd_regexp = /amd ?[\w-]+/
     ideal_amd_regexp2 = /amd ?\w+ ?[\w-]+/
     amd_regexp = /amd ?(\w+-core)? ?[\w-]+/
-    amd_regexp2 = /amd ?(ryzen)? \d+ \d+\w+/
+    amd_regexp2 = /amd ?(ryzen)? ?\d+ ?[\d\w]*/
     amd_special = /amd ?[\w-]+/
     # NOTE: order is important!!!
     regexps = [
@@ -53,20 +52,17 @@ module TextParser
     intel_hd_regexp = /intel u?hd ?\w* ?(graphics)? ?\w*\d+\w*/
     intel_hd_regexp2 = /u?hd graphics ?\w*\d+\w*/
     ideal_amd_regexp = /amd ?\w* ?\w* \w*\d+\w*/
-    ati_regexp = /ati ?\w* ?\w* ?\w* \w*\d+\w*/
-    ati_regexp2 = /amd ?\w* ?\w* ?\w* \w*\d+\w*/
-    ati_regexp3 = /(radeon ?(vega)? ?\d+)/
-    ati_regexp4 = /(amd ?(radeon)? ?(hd|r.?|pro|)? ?[\w-]+)/
-    ideal_nvidia_regexp = /(nvidia|geforce|quadro) ?(gtx?)? ?\w*\d+\w*/
+    amd_regexp2 = /amd ?\w* ?\w* ?\w* \w*\d+\w*/
+    amd_regexp3 = /(radeon ?(vega)? ?\d+)/
+    amd_regexp4 = /radeon ?(hd|r.?|pro|)? ?[\w-]*/
+    ideal_nvidia_regexp = /(nvidia|geforce|quadro) ?(gtx?|rtx?)? ?\w*\d+\w* ?(super)? ?(ti)? ?(max-q)?/
     # NOTE: order is important!!!
     regexps = [
       [ideal_nvidia_regexp, 'nvidia'],
-      [ati_regexp3, 'amd'],
-      [ati_regexp4, 'amd'],
+      [amd_regexp3, 'amd'],
+      [amd_regexp4, 'amd'],
       [ideal_amd_regexp, 'amd'],
-      [ati_regexp3, 'amd'],
-      [ati_regexp2, 'amd'],
-      [ati_regexp, 'amd'],
+      [amd_regexp2, 'amd'],
       [ideal_intel_regexp, 'intel'],
       [intel_hd_regexp, 'intel'],
       [intel_hd_regexp2, 'intel']

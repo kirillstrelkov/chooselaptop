@@ -35,4 +35,20 @@ Lenovo IdeaPad G510A 59-402568
     sorted_laptops = get_sorted_laptops(laptops)
     assert_equal(sorted_laptops.length, 3)
   end
+
+  def test_rtx_laptop
+    laptops = [%[Display: 16", 3072x1920, 226ppi, 60Hz, non-glare, 300cd/m², 1000:1 • CPU: Intel Core i5-11400H, 6C/12T, 2.20-4.50GHz, 12MB+8MB Cache, 35-45W TDP, Codename "Tiger Lake-H45" (Willow Cove, 10nm SuperFin) • RAM: 16GB DDR4-3200 (2x 8GB Module, 2 ... (zu wenige) 90 aus 1 Test 3 ab € 1249,00 [DE] Cyberport Stores Deutschland und 2 weitere Händler HP Victus 16-d0065ng Mica Silver, Core i7-11800H, 16GB RAM, 512GB SSD, GeForce RTX 3050 Ti, DE (4H3E6EA#ABD) HP Victus 16-d0065ng Mica Silver, Core i7-11800H, 16GB RAM, 512GB SSD, GeForce RTX 3050 Ti, DE (4H3E6EA#ABD)],
+               %[OMEN 16-c0253ng Gaming-Notebook (40,9 cm/16,1 Zoll, AMD Ryzen 5, GeForce RTX™ 3050 Ti, 512 GB SSD, Kostenloses Upgrade auf Windows 11, sobald verfügbar)]]
+    sorted_laptops = get_sorted_laptops(laptops)
+
+    laptop = sorted_laptops.first
+    assert_kind_of(Hash, laptop)
+    assert_equal('AMD Ryzen 5 5600H', laptop[:cpu_model])
+    assert_equal('NVIDIA GeForce RTX 3050 Ti Laptop GPU', laptop[:gpu_model])
+
+    laptop = sorted_laptops.second
+    assert_kind_of(Hash, laptop)
+    assert_equal('Intel Core i5-11400H', laptop[:cpu_model])
+    assert_equal('NVIDIA GeForce RTX 3050 Ti Laptop GPU', laptop[:gpu_model])
+  end
 end

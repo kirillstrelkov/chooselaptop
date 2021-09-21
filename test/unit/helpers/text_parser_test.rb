@@ -127,7 +127,7 @@ class TextParserTest < ActionView::TestCase
       %[15.6" hd trubrite led (1366x768), intel core i5-4200m 2.5ghz/3mb, nvidia gt 710m 2gb, 4gb ddr3-1600mhz, sata 750gb 5400rpm, sm dl dvd+/-rw, wlan 802.1...] => 'nvidia gt 710m',
       %[15.6" hd trubrite led (1366x768), intel core i5-4200m 2.5ghz/3mb, nvidia geforce 710m 2gb, 4+4gb ddr3-1600mhz, sata 1tb 5400rpm, sm dl dvd+/-rw, wlan...] => 'nvidia geforce 710m',
       %(15.6" hd 1366x768 led, intel core i5-3230m 2.6 ghz, nvidia geforce 820m 1gb, 4gb ddr3l, 500gb 5400rpm, dvd super multi dl, wlan 802.11b/g/n + bluetoot...) => 'nvidia geforce 820m',
-      %[15.6" hd (1366x768) led glare, intel core i7-4510u 2.0ghz, 4gb ddr3l, 1tb 5400rpm, ati radeon r5 m230 2gb, sm dvd+-rw, 802.11b/g/n + bluetooth4.0, 4 c...] => 'amd ati radeon r5 m230 2gb',
+      %[15.6" hd (1366x768) led glare, intel core i7-4510u 2.0ghz, 4gb ddr3l, 1tb 5400rpm, ati radeon r5 m230 2gb, sm dvd+-rw, 802.11b/g/n + bluetooth4.0, 4 c...] => 'amd radeon r5 m230',
       %[15,6" (1366x768) glare, intel core i5-2430m 2.40 ghz, 4gb 1066mhz, 640gb 5400rpm, nvidia geforce gt 520m 1gb, dvd+/-rw supermulti dl, wlan 802.11b/g/n...] => 'nvidia geforce gt 520m',
       %[17.3" (1600x900) led glossy hd+, intel core i3-4000m 2.4ghz, 4gb ddr3-1600, nvidia geforce gt 745m 2gb, 1tb 5400rpm, sm dvd+-rw, dos, wlan 802.11b/g/n...] => 'nvidia geforce gt 745m',
       %[17.3" (1600x900) led glare hd+, intel core i3-4000m 2.4ghz, 4gb ddr3-1600, intel hd 4600, 1tb 5400rpm, sm dvd+-rw, dos, Беспроводной  b/g/n, Камера, 1xusb...] => 'intel hd 4600',
@@ -183,7 +183,7 @@ class TextParserTest < ActionView::TestCase
       %[15.6" hd (1366x768) wled glare, intel core i3-3217u (1.8ghz/3mb), hd 4000, 4gb (1x4gb) ddr3-1600mhz, sata 500gb 5400rpm, 8x dvd+/-rw, bluetooth, wlan...] => nil,
       %(15.6" hd 1366x768 led glare, intel core i3-3217u 1.8 ghz/3mb, geforce gt710 1gb, 4gb ddr3, 750gb 5400rpm, sm dl 8x dvd+/-rw, wlan 802.11b/g/n + blueto...) => 'nvidia geforce gt710',
       %(15.6" hd 1366x768 led glare, intel core i3-3217u 1.8ghz, nvidia geforce gt710 1gb, 4gb ddr3, 750gb 5400rpm, sm dl 8x dvd+/-rw, wlan 802.11b/g/n + Синий...) => 'nvidia geforce gt710',
-      %[15.6" hd (1366x768) led glare, amd a6-6310 apu quad-core, amd radeon hd r5 m230 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, Беспроводной ...] => 'amd a6-6310',
+      %[15.6" hd (1366x768) led glare, amd a6-6310 apu quad-core, amd radeon hd r5 m230 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, Беспроводной ...] => 'amd radeon hd r5',
       %[15.6" hd (1366x768) led glare, intel pentium 3558u (1.7ghz/2mb), nvidia geforce 820m 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, tray lo...] => 'nvidia geforce 820m',
       %[15.6" hd (1366x768) led glare, pentium 3558u (1.7ghz/2mb), nvidia geforce 820m 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, tray load dvd...] => 'nvidia geforce 820m',
       %[17.3" glare hd+ (1600x900) led glare, pentium 3558u (1.7ghz/2mb), intel hd4000 graphics, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, tray load dvd...] => 'intel hd4000',
@@ -196,7 +196,7 @@ class TextParserTest < ActionView::TestCase
       %[15.6" hd trubrite led (1366x768), intel pentium n3530, intel hd, 4gb ddr3l (1333mhz), sata 500gb 5400rpm, sm dl dvd+r/+rw, wlan 802.11bgn, bluetooth 4...] => nil,
       %[11.6" touch hd (1366x768) led glare (ips), intel pentium n3530 (up to 2.58ghz/2mb), intel hd graphics, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm,...] => nil,
       %[15.6" hd trubrite led (1366x768), intel pentium n3520 2.42ghz/2mb, intel gma, 4gb ddr3-1600mhz, sata 500gb 5400rpm, sm dl dvd+/-rw, wlan 802.11b/g/n,...] => nil,
-      %[15.6" hd (1366x768) led glare, amd a4-6210 apu quad-core, amd radeon hd r5 m230 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, Беспроводной ...] => 'amd a4-6210',
+      %[15.6" hd (1366x768) led glare, amd a4-6210 apu quad-core, amd radeon hd r5 m230 2gb ddr3l, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, Беспроводной ...] => 'amd radeon hd r5',
       %[11.6" touch hd led (1366x768) glare, intel atom z3775 1.46ghz/2mb, 2gb, 500gb 5400rpm + 32gb emmc, intel hd / wlan 802.11 a/b/g/n, bluetooth, windows...] => nil,
       %[15.6" hd (1366x768) led glare, intel celeron 2957u (1.4ghz/2mb), hd4000, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm hybrid Жесткий диск , 32gb cache, tra...] => nil,
       %[15.6" hd (1366x768) led glare, intel celeron 2957u (1.4ghz/2mb), hd4000, 4gb (1x4gb) ddr3l-1600mhz, sata 500gb 5400rpm, tray load dvd drive, wlan 802....] => nil,
@@ -204,12 +204,10 @@ class TextParserTest < ActionView::TestCase
       %[15.6" hd trubrite led (1366x768), intel celeron n2830, 4gb ddr3l (1333mhz)/ sata 500gb 5400rpm, sm dl dvd+/-rw, wlan 802.11b/g/n, bluetooth 4.0/ ml, /...] => nil,
       %[15.6" led (1366x768)wxgag/ intel celeron n2820 Двухъядерный/ intel hd graphics/ vram shared/ 2gb ddr3/ 320gb Жесткий диск/ bgn/ bt/ usb3.0/ sd reader/ 4 cell batt...] => nil,
       %(15.6" led 1366x768 wxgag non-glare, intel celeron n2815 1.86ghz, intel hd graphics, 2gb ddr3, 320gb Жесткий диск, bgn, 4-cell battery, webcamera, usb 2.0/usb 3...) => nil,
-      %[15.6" (1366x768) hd glossy, amd e1-6010 1.35 ghz, 4gb ddr3, 500gb 5400rpm, integrated amd radeon r2 series, wlan 802.11b/g/n +bluetooth 4.0, dvd±rw, 1...] => 'amd e1-6010',
+      %[15.6" (1366x768) hd glossy, amd e1-6010 1.35 ghz, 4gb ddr3, 500gb 5400rpm, integrated amd radeon r2 series, wlan 802.11b/g/n +bluetooth 4.0, dvd±rw, 1...] => 'amd radeon r2 series',
       %(15.6" led 1366x768 wxgag, intel core 3-3217u 1.8ghz, intel hd graphics, 4gb ddr3, 500gb Жесткий диск, bgn, bt, 4 cell batt. hd камера, usb 3.0, Черный, microsof...) => nil
     }
     data.each do |laptop_desc, gpu|
-      # puts %(%[#{laptop_desc}] => #{get_gpu_from_text(laptop_desc).inspect}, )
-
       if gpu.nil?
         assert_nil(get_gpu_from_text(laptop_desc), laptop_desc)
       else
@@ -221,11 +219,13 @@ class TextParserTest < ActionView::TestCase
     assert_equal(63, found_percentage.to_i)
   end
 
-  def test_get_cpu_from_text_intel
+  def test_get_from_text_intel
     assert_equal('intel i5-4210m', get_cpu_from_text('i5-4210m'))
+    assert_equal('intel i7-1165g7', get_cpu_from_text('Intel Core i7-1165G7'))
   end
 
   def test_get_cpu_from_text_amd
+    assert_equal('amd ryzen 5', get_cpu_from_text('AMD Ryzen 5'))
     assert_equal('amd ryzen 7 2700u', get_cpu_from_text('AMD Ryzen 7 2700U'))
     assert_equal('amd ryzen 7 2700u', get_cpu_from_text('AMD Ryzen 7 2700U 4x 2,20 GHz '))
     assert_equal('amd ryzen 5 2500u', get_cpu_from_text('AMD Ryzen 5 2500U 4x 2,0 GHz (TurboBoost bis zu 3.60 GHz) /'))
@@ -239,7 +239,10 @@ class TextParserTest < ActionView::TestCase
     assert_equal('nvidia geforce gt 740m', get_gpu_from_text('NVIDIA® GeForce® GT 740M 2GB'))
     assert_equal('nvidia geforce mx110', get_gpu_from_text(' GeForce MX110 2048 MB DDR3 '))
     assert_equal('nvidia quadro p5000', get_gpu_from_text('NVIDIA Quadro P5000'))
-    assert_equal('nvidia geforce gtx 1070', get_gpu_from_text(' NVIDIA GeForce GTX 1070 Max-Q'))
+    assert_equal('nvidia geforce gtx 1070 max-q', get_gpu_from_text(' NVIDIA GeForce GTX 1070 Max-Q'))
+    assert_equal('nvidia geforce gtx 1070 max-q', get_gpu_from_text(' NVIDIA GeForce GTX 1070 Max-Q'))
+    assert_equal('nvidia geforce rtx 3080 max-q', get_gpu_from_text('NVIDIA GeForce RTX 3080 Max-Q'))
+    assert_equal('nvidia geforce rtx 3050 ti', get_gpu_from_text('GeForce RTX 3050 Ti'))
   end
 
   def test_get_gpu_from_text_radeon
@@ -247,6 +250,6 @@ class TextParserTest < ActionView::TestCase
     assert_equal('amd radeon r7 m440', get_gpu_from_text('amd radeon r7 m440 2gb'))
     assert_equal('amd radeon vega 8', get_gpu_from_text('Radeon Vega 8 Mobile'))
     assert_equal('amd radeon vega 10', get_gpu_from_text('Radeon Vega 10 Mobile'))
-    assert_equal('amd radeon hd 8750m', get_gpu_from_text('amd radeon hd 8750m 2gb'))
+    assert_equal('amd radeon rx 6600m', get_gpu_from_text('Radeon RX 6600M'))
   end
 end

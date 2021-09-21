@@ -56,10 +56,14 @@ module LaptopsHelper
   end
 
   def get_good_laptops_count(sorted_laptops)
-    sorted_laptops.reject { |laptop| (laptop[:cpu_percentage] == TOP_VALUE) || (laptop[:gpu_percentage] == TOP_VALUE) }.length
+    sorted_laptops.reject do |laptop|
+      (laptop[:cpu_percentage] == TOP_VALUE) || (laptop[:gpu_percentage] == TOP_VALUE)
+    end.length
   end
 
   def get_bad_laptops_count(sorted_laptops)
-    sorted_laptops.select { |laptop| (laptop[:cpu_percentage] == TOP_VALUE) || (laptop[:gpu_percentage] == TOP_VALUE) }.length
+    sorted_laptops.select do |laptop|
+      (laptop[:cpu_percentage] == TOP_VALUE) || (laptop[:gpu_percentage] == TOP_VALUE)
+    end.length
   end
 end

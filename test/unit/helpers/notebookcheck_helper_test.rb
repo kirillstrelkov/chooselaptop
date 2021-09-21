@@ -50,8 +50,15 @@ class NotebookcheckHelperTest < ActionView::TestCase
   end
 
   def test_get_gpu_close_name
-    assert_equal('NVIDIA GeForce GTX 1050 (Notebook)', get_gpu_data_from_notebookcheck('geforce 1050')[:name])
-    assert_equal('NVIDIA GeForce GTX 1050 Ti (Notebook)', get_gpu_data_from_notebookcheck('geforce 1050 ti')[:name])
+    assert_equal('NVIDIA GeForce GTX 1050 Mobile', get_gpu_data_from_notebookcheck('geforce 1050')[:name])
+    assert_equal('NVIDIA GeForce GTX 1050 Ti Mobile', get_gpu_data_from_notebookcheck('geforce 1050 ti')[:name])
+  end
+
+  def test_get_gpu_rtx
+    assert_equal('NVIDIA GeForce RTX 3060 Laptop GPU',
+                 get_gpu_data_from_notebookcheck('GeForce RTX 3060')[:name])
+    assert_equal('NVIDIA GeForce RTX 3050 Ti Laptop GPU',
+                 get_gpu_data_from_notebookcheck('GeForce RTX 3050 Ti')[:name])
   end
 
   def test_get_bad_gpu_and_bad_cpu
@@ -71,7 +78,8 @@ class NotebookcheckHelperTest < ActionView::TestCase
       bad_data << data[:name] if get_cpu_from_text(data[:name]).nil?
     end
     good_precentage = (all_data.length - bad_data.length) / all_data.length.to_f * 100
-    assert good_precentage.to_i >= 74, format("Wasn't parsed, good pretentage #{good_precentage}:\n%s\n", bad_data.join("\n"))
+    assert good_precentage.to_i >= 74,
+           format("Wasn't parsed, good pretentage #{good_precentage}:\n%s\n", bad_data.join("\n"))
   end
 
   def test_parse_all_gpus
@@ -81,6 +89,7 @@ class NotebookcheckHelperTest < ActionView::TestCase
       bad_data << data[:name] if get_gpu_from_text(data[:name]).nil?
     end
     good_precentage = (all_data.length - bad_data.length) / all_data.length.to_f * 100
-    assert good_precentage.to_i >= 77, format("Wasn't parsed, good pretentage #{good_precentage}:\n%s\n", bad_data.join("\n"))
+    assert good_precentage.to_i >= 77,
+           format("Wasn't parsed, good pretentage #{good_precentage}:\n%s\n", bad_data.join("\n"))
   end
 end
