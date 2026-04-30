@@ -8,7 +8,7 @@ GPU ratings are taken from <https://www.notebookcheck.net/Mobile-Graphics-Cards-
 
 Technology stack:
 
-Ruby on Rails, HAML, jQuery, CoffeeScript, HTML, Bootstrap, CSS, Heroku
+Ruby, Ruby on Rails, PostgreSQL, Redis, Puma, HAML, SASS, Bootstrap, jQuery, CoffeeScript, Turbolinks, Twitter Typeahead, HTML, CSS, Heroku, RuboCop
 
 Live site examples:
 
